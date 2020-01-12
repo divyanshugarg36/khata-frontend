@@ -1,15 +1,26 @@
-import React from 'react';
-// import { Router, Switch } from 'react-router-dom';
+import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
 
-function Khata() {
-  return (
-    <>
-      {/* <Switch> */}
-      {/* <Router /> */}
-      <div>Hello World</div>
-      {/* </Switch> */}
-    </>
-  );
+import { Login } from './login';
+import { Register } from './register';
+
+export class Khata extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    return (
+      <>
+        <div>Hello World</div>
+        <Switch>
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
+        </Switch>
+      </>
+    );
+  }
 }
 
 export default Khata;

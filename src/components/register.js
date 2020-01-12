@@ -2,24 +2,26 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
-export class Login extends Component {
+export class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {};
     this.username = React.createRef();
     this.password = React.createRef();
+    this.email = React.createRef();
   }
 
-  onLogin = (e) => {
+  onRegister = (e) => {
     e.preventDefault();
     const {
+      email: { current: { value: email } },
       username: { current: { value: username } },
       password: { current: { value: password } },
     } = this;
     const data = {
-      username, password,
+      username, password, email,
     };
-    axios.post('localhost:1337/login', data)
+    axios.post('localhost:1337/register', data)
       .then(({ data }) => {
         console.log(data);
       }).catch((error) => {
@@ -28,21 +30,25 @@ export class Login extends Component {
   }
 
   render() {
-    const { onLogin } = this;
+    const { onRegister } = this;
     return (
-      <form onSubmit={onLogin}>
+      <form onSubmit={onRegister}>
         <input
           type="text"
           ref={this.username}
         />
         <input
+          type="email"
+          ref={this.email}
+        />
+        <input
           type="password"
           ref={this.password}
         />
-        <button>Login</button>
+        <button>Register</button>
       </form>
     );
   }
 }
 
-export default withRouter(Login);
+export default withRouter(Register);
