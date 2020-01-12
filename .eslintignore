@@ -2,3 +2,4 @@ build/*.js
 config/*.js
 public/*.js
 scripts/*.js
+src/serviceWorker.js
