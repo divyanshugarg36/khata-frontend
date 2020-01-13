@@ -19,7 +19,7 @@ export class Login extends Component {
     const data = {
       username, password,
     };
-    axios.post('localhost:1337/login', data)
+    axios.post('http://localhost:1337/login', data)
       .then(({ data }) => {
         console.log(data);
       }).catch((error) => {

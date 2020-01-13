@@ -21,7 +21,7 @@ export class Register extends Component {
     const data = {
       username, password, email,
     };
-    axios.post('localhost:1337/register', data)
+    axios.post('http://localhost:1337/register', data)
       .then(({ data }) => {
         console.log(data);
       }).catch((error) => {
