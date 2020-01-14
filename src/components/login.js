@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
+import Input from './ui/Input';
 
 export class Login extends Component {
   constructor(props) {
@@ -31,13 +32,17 @@ export class Login extends Component {
     const { onLogin } = this;
     return (
       <form onSubmit={onLogin}>
-        <input
-          type="text"
+        <Input
+          label="Username"
+          id="username"
           ref={this.username}
+          type="text"
         />
-        <input
-          type="password"
+        <Input
+          label="Password"
+          id="password"
           ref={this.password}
+          type="password"
         />
         <button>Login</button>
       </form>

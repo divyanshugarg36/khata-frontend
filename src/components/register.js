@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
+import Input from './ui/Input';
 
 export class Register extends Component {
   constructor(props) {
@@ -33,17 +34,23 @@ export class Register extends Component {
     const { onRegister } = this;
     return (
       <form onSubmit={onRegister}>
-        <input
-          type="text"
-          ref={this.username}
-        />
-        <input
-          type="email"
+        <Input
+          label="Email"
+          id="email"
           ref={this.email}
+          type="email"
         />
-        <input
-          type="password"
+        <Input
+          label="Username"
+          id="username"
+          ref={this.username}
+          type="text"
+        />
+        <Input
+          label="Password"
+          id="password"
           ref={this.password}
+          type="password"
         />
         <button>Register</button>
       </form>

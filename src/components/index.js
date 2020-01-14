@@ -13,7 +13,7 @@ export class Khata extends Component {
   render() {
     return (
       <>
-        <div>Hello World</div>
+        <div>Welcome to Khata</div>
         <Switch>
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
