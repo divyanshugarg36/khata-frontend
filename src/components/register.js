@@ -44,7 +44,6 @@ export class Register extends Component {
           label="Username"
           id="username"
           ref={this.username}
-          type="text"
         />
         <Input
           label="Password"
