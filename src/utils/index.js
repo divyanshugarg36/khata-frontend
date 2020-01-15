@@ -1,2 +1,2 @@
-export { logout } from './logout';
-export { login } from './login';
+export { setToken } from './setToken';
+export { unSetToken } from './unSetToken';

@@ -1,3 +1,3 @@
-export const login = (token) => {
+export const setToken = (token) => {
   localStorage.setItem('access_token', token);
 };

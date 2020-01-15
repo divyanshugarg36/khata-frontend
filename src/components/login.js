@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import Input from './ui/Input';
+import { API } from '../api';
 
 export class Login extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ export class Login extends Component {
     const data = {
       username, password,
     };
-    axios.post('http://localhost:1337/login', data)
+    axios.post(API.login, data)
       .then(({ data }) => {
         console.log(data);
       }).catch((error) => {
