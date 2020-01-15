@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import Input from './ui/Input';
 import { API } from '../api';
+import { setToken } from '../utils';
 
 export class Register extends Component {
   constructor(props) {
@@ -26,6 +27,8 @@ export class Register extends Component {
     axios.post(API.register, data)
       .then(({ data }) => {
         console.log(data);
+        const { success, token } = data;
+        if (success) { setToken(token); }
       }).catch((error) => {
         console.log(error);
       });

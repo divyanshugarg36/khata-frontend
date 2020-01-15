@@ -24,6 +24,7 @@ export class Login extends Component {
     };
     axios.post(API.login, data)
       .then(({ data }) => {
+        console.log(data);
         const { success, token } = data;
         if (success) { setToken(token); }
       }).catch((error) => {
