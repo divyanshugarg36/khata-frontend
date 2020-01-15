@@ -27,6 +27,7 @@ export class Login extends Component {
       }).catch((error) => {
         console.log(error);
       });
+    console.log(data);
   }
 
   render() {

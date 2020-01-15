@@ -1,5 +1,4 @@
-const HOST = 'http://localhost:1377/';
-
+const HOST = 'http://localhost:1337/';
 export const API = {
   register: `${HOST}register`,
   login: `${HOST}login`,
