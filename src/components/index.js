@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import { Login } from './login';
 import { Register } from './register';
 
-export class Khata extends Component {
+class Khata extends Component {
   constructor(props) {
     super(props);
     this.state = {};
