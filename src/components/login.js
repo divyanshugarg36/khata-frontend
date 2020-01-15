@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import Input from './ui/Input';
 import { API } from '../api';
+import { setToken } from '../utils';
 
 export class Login extends Component {
   constructor(props) {
@@ -23,11 +24,11 @@ export class Login extends Component {
     };
     axios.post(API.login, data)
       .then(({ data }) => {
-        console.log(data);
+        const { success, token } = data;
+        if (success) { setToken(token); }
       }).catch((error) => {
         console.log(error);
       });
-    console.log(data);
   }
 
   render() {
