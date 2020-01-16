@@ -46,5 +46,4 @@ Dashboard.propTypes = {
 
 Dashboard.defaultProps = {};
 
-
 export default withRouter(Dashboard);

@@ -53,12 +53,10 @@ class Login extends Component {
       <form onSubmit={onLogin}>
         <Input
           label="Username"
-          id="username"
           ref={this.username}
         />
         <Input
           label="Password"
-          id="password"
           ref={this.password}
           type="password"
         />

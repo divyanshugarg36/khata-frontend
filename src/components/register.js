@@ -54,18 +54,15 @@ class Register extends Component {
         <form onSubmit={onRegister}>
           <Input
             label="Email"
-            id="email"
             ref={this.email}
             type="email"
           />
           <Input
             label="Username"
-            id="username"
             ref={this.username}
           />
           <Input
             label="Password"
-            id="password"
             ref={this.password}
             type="password"
           />
