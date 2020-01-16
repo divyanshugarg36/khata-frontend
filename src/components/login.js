@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import Input from './common/Input';
 import { API } from '../api';
-import { setToken } from '../utils';
+import { setToken, getToken } from '../utils';
 
-export class Login extends Component {
+
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -13,12 +15,21 @@ export class Login extends Component {
     this.password = React.createRef();
   }
 
+  componentDidMount() {
+    const { history: { push } } = this.props;
+    if (getToken()) {
+      push('/dashboard');
+    }
+  }
+
+
   onLogin = (e) => {
     e.preventDefault();
     const {
       username: { current: { value: username } },
       password: { current: { value: password } },
     } = this;
+    const { history: { push } } = this.props;
     const data = {
       username, password,
     };
@@ -26,7 +37,10 @@ export class Login extends Component {
       .then(({ data }) => {
         console.log(data);
         const { success, token } = data;
-        if (success) { setToken(token); }
+        if (success) {
+          setToken(token);
+          push('/dashboard');
+        }
       }).catch((error) => {
         console.log(error);
       });
@@ -34,6 +48,7 @@ export class Login extends Component {
 
   render() {
     const { onLogin } = this;
+    const { history: { push } } = this.props;
     return (
       <form onSubmit={onLogin}>
         <Input
@@ -48,9 +63,17 @@ export class Login extends Component {
           type="password"
         />
         <button>Login</button>
+        <div onClick={() => push('/register')}>Dont have an account</div>
       </form>
     );
   }
 }
+
+
+Login.propTypes = {
+  history: PropTypes.instanceOf(Object).isRequired,
+};
+
+Login.defaultProps = {};
 
 export default withRouter(Login);

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 
-import { Login } from './login';
-import { Register } from './register';
-import { NavBar } from './navBar';
+import Login from './login';
+import Register from './register';
+import Dashboard from './dashboard';
 
 class Khata extends Component {
   constructor(props) {
@@ -14,11 +14,10 @@ class Khata extends Component {
   render() {
     return (
       <div>
-        <Route path="/" component={NavBar} />
-        <div>Welcome to Khata</div>
         <Switch>
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
+          <Route path="/dashboard" component={Dashboard} />
         </Switch>
       </div>
     );

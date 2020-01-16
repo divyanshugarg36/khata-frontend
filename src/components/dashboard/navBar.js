@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { unSetToken } from '../utils';
+import PropTypes from 'prop-types';
+import { unSetToken } from '../../utils';
 
-export class NavBar extends Component {
+class NavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -12,17 +13,21 @@ export class NavBar extends Component {
   render() {
     const { history: { push } } = this.props;
     const nav = [
-      { label: 'Login', onClick: () => { } },
+      { label: 'Logout', onClick: () => { unSetToken(); push('login'); } },
     ];
     return (
       <div>
         {nav.map(({ label, onClick }) => <span key={label} onClick={onClick}>{`${label} `}</span>)}
-        <span onClick={() => push('/login')}>Login </span>
-        <span onClick={() => push('/register')}>Register </span>
-        <span onClick={() => unSetToken()}>Logout </span>
       </div>
     );
   }
 }
+
+NavBar.propTypes = {
+  history: PropTypes.instanceOf(Object).isRequired,
+};
+
+NavBar.defaultProps = {};
+
 
 export default withRouter(NavBar);
