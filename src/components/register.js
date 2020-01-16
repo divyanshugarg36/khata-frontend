@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
-import Input from './ui/Input';
+import Input from './common/Input';
 import { API } from '../api';
 import { setToken } from '../utils';
 
