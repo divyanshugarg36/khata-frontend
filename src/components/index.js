@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import {
+  Route, Switch, withRouter, Redirect,
+} from 'react-router-dom';
 
 import Login from './login';
 import Register from './register';
@@ -15,6 +17,7 @@ class Khata extends Component {
     return (
       <div>
         <Switch>
+          <Redirect from="/" exact to="/login" />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/dashboard" component={Dashboard} />
