@@ -3,9 +3,11 @@ import {
   Route, Switch, withRouter, Redirect,
 } from 'react-router-dom';
 
+import axios from 'axios';
 import Login from './login';
 import Register from './register';
 import Dashboard from './dashboard';
+import { getToken } from '../utils';
 
 class Khata extends Component {
   constructor(props) {
@@ -14,6 +16,7 @@ class Khata extends Component {
   }
 
   render() {
+    axios.defaults.headers.common.Authorization = getToken();
     return (
       <div>
         <Switch>
