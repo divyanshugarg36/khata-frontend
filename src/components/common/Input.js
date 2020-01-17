@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Input = React.forwardRef((props, ref) => {
-  const { label, type } = props;
-  const id = props.id && label.replace(/ +/g, '').toLowerCase();
+  const { label, id, type } = props;
+  const newId = !id ? Math.random().toString(36).substring(2) : id;
   return (
     <div className="input-container">
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={newId}>{label}</label>
       <input
         ref={ref}
-        id={id}
+        id={newId}
         type={type}
       />
     </div>
@@ -23,8 +23,8 @@ Input.propTypes = {
 };
 
 Input.defaultProps = {
+  id: '',
   type: 'text',
-  id: null,
 };
 
 export default Input;
