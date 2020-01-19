@@ -35,7 +35,7 @@ class Login extends Component {
     };
     axios.post(API.login, data)
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         const { success, token } = data;
         if (success) {
           setToken(token);
@@ -44,6 +44,7 @@ class Login extends Component {
       }).catch((error) => {
         console.log(error);
       });
+    // console.log('i am called');
   }
 
   render() {
