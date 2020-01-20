@@ -8,7 +8,7 @@ class Project extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      projects: [],
+      assignments: [],
     };
     this.name = React.createRef();
     this.description = React.createRef();
@@ -16,7 +16,7 @@ class Project extends Component {
 
   componentDidMount() {
     axios.post(API.fetchProjects, {})
-      .then(({ data }) => this.setState({ projects: data.projects }))
+      .then(({ data }) => this.setState({ assignments: data.assignment }))
       .catch((err) => console.log(err));
   }
 
@@ -32,9 +32,9 @@ class Project extends Component {
     axios.post(API.addProject, data)
       .then(({ data }) => {
         console.log('Project added!', data);
-        const { projects } = this.state;
-        projects.push(data.project);
-        this.setState({ projects });
+        const { assignments } = this.state;
+        assignments.push(data.assignment);
+        this.setState({ assignments });
       }).catch((error) => {
         console.log('Project not added!', error);
       });
@@ -42,7 +42,7 @@ class Project extends Component {
 
   render() {
     const { addProject } = this;
-    const { projects } = this.state;
+    const { assignments } = this.state;
     return (
       <>
         <div className="form-container">
@@ -68,12 +68,12 @@ class Project extends Component {
         <div className="container">
           <h4>List of projects</h4>
           <ul className="list-container">
-            { projects.map((p) => (
-              <li key={p.id}>
+            { assignments.map((a) => (
+              <li key={a.project.id}>
                 <strong>
-                  {p.name}
+                  {a.project.name}
                 </strong>
-                <p>{p.description}</p>
+                <p>{a.project.description}</p>
               </li>
             )) }
           </ul>
