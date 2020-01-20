@@ -8,6 +8,7 @@ import Login from './login';
 import Register from './register';
 import Dashboard from './dashboard';
 import Profile from './profile';
+import Project from './project';
 import { getToken } from '../utils';
 
 class Khata extends Component {
@@ -26,6 +27,7 @@ class Khata extends Component {
           <Route path="/register" component={Register} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/profile" component={Profile} />
+          <Route path="/project" component={Project} />
         </Switch>
       </div>
     );
