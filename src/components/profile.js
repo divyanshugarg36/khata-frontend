@@ -2,41 +2,50 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import Input from './common/Input';
-import Select from './common/Select';
 import { API } from '../api';
 
 class Profile extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      roles: ['Admin', 'Member'],
-      types: ['Monthly', 'Hourly', 'Other'],
-      fields: ['email', 'username', 'password', 'role', 'type'],
-    };
+    this.state = {};
 
-    const { fields } = this.state;
-    fields.forEach((el) => { this[el] = React.createRef(); });
+    this.email = React.createRef();
+    this.username = React.createRef();
+    this.oldPassword = React.createRef();
+    this.newPassword = React.createRef();
   }
 
   updateProfile = (e) => {
     e.preventDefault();
 
-    const data = {};
-    const { fields } = this.state;
-    fields.forEach((el) => {
-      data[el] = this[el].current.value;
-    });
+    const {
+      email,
+      username,
+      oldPassword,
+      newPassword,
+    } = this;
 
-    axios.put(API.login, data)
-      .then(({ data }) => {
-        console.log(data);
+    const details = {
+      email: email.current.value,
+      username: username.current.value,
+      oldPassword: oldPassword.current.value,
+      newPassword: newPassword.current.value,
+    };
+
+    axios.post(API.verifyPassword, { password: details.oldPassword })
+      .then(() => {
+        axios.put(API.update, details)
+          .then(({ data }) => {
+            console.log('Profile updated!', data);
+          }).catch((error) => {
+            console.log('Profile not updated!', error);
+          });
       }).catch((error) => {
-        console.log(error);
+        console.log("Password doesn't match!", error);
       });
   }
 
   render() {
-    const { roles, types } = this.state;
     return (
       <div>
         <form onSubmit={this.updateProfile}>
@@ -50,19 +59,14 @@ class Profile extends Component {
             ref={this.username}
           />
           <Input
-            label="Password"
-            ref={this.password}
+            label="Current Password"
+            ref={this.oldPassword}
             type="password"
           />
-          <Select
-            label="Role"
-            ref={this.role}
-            options={roles}
-          />
-          <Select
-            label="Type"
-            ref={this.type}
-            options={types}
+          <Input
+            label="New Password"
+            ref={this.newPassword}
+            type="password"
           />
           <button type="submit">Save</button>
         </form>

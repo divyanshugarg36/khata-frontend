@@ -1,6 +1,11 @@
 const HOST = 'http://localhost:1337/';
+
 export const API = {
-  register: `${HOST}register`,
+  // Authentication
   login: `${HOST}login`,
-  verifyToken: `${HOST}verifytoken`,
+  verifyPassword: `${HOST}verifypassword`,
+
+  // User
+  register: `${HOST}register`,
+  update: `${HOST}user/update`,
 };

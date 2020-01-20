@@ -8,7 +8,7 @@ const Select = React.forwardRef((props, ref) => {
     <div className="select-container">
       <label htmlFor={newId}>{label}</label>
       <select id={newId} ref={ref}>
-        { options.map((opt, key) => <option key={key}>{opt}</option>) }
+        { options.map((opt, key) => <option key={key} value={opt}>{opt}</option>) }
       </select>
     </div>
   );
