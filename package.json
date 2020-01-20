@@ -2,6 +2,10 @@
   "name": "khata-frontend",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "10.18.1",
+    "npm": "6.4.1"
+  },
   "dependencies": {
     "@babel/core": "7.7.4",
     "@svgr/webpack": "4.3.3",
