@@ -14,6 +14,7 @@ class NavBar extends Component {
     const { history: { push } } = this.props;
     const nav = [
       { label: 'Logout', onClick: () => { unSetToken(); push('login'); } },
+      { label: 'Profile', onClick: () => { push('/profile'); } },
     ];
     return (
       <div>
