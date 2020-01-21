@@ -68,14 +68,23 @@ class Project extends Component {
         <div className="container">
           <h4>List of projects</h4>
           <ul className="list-container">
-            { assignments.map((a) => (
-              <li key={a.project.id}>
-                <strong>
-                  {a.project.name}
-                </strong>
-                <p>{a.project.description}</p>
-              </li>
-            )) }
+            { assignments.map((a) => {
+              const {
+                contributors,
+                description,
+                id,
+                name,
+              } = a.project;
+              return (
+                <li key={id}>
+                  <strong>
+                    {name}
+                  </strong>
+                  {` (${contributors.members.length} members)`}
+                  <p>{description}</p>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </>
