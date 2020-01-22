@@ -4,11 +4,14 @@ import {
 } from 'react-router-dom';
 
 import axios from 'axios';
+import NavBar from './navBar';
 import Login from './login';
 import Register from './register';
 import Dashboard from './dashboard';
 import Profile from './profile';
-import Project from './project';
+import AddProject from './project/addProject';
+import Project from './project/project';
+import ProjectList from './project/projectList';
 import { getToken } from '../utils';
 
 class Khata extends Component {
@@ -21,13 +24,16 @@ class Khata extends Component {
     axios.defaults.headers.common.Authorization = getToken();
     return (
       <div>
+        { getToken() && <NavBar /> }
         <Switch>
           <Redirect from="/" exact to="/login" />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/profile" component={Profile} />
-          <Route path="/project" component={Project} />
+          <Route path="/project/add" component={AddProject} />
+          <Route path="/project/all" component={ProjectList} />
+          <Route path="/project/:id" component={Project} />
         </Switch>
       </div>
     );

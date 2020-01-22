@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { unSetToken } from '../../utils';
+import { unSetToken } from '../utils';
 
 class NavBar extends Component {
   constructor(props) {
@@ -13,9 +13,11 @@ class NavBar extends Component {
   render() {
     const { history: { push } } = this.props;
     const nav = [
-      { label: 'Logout', onClick: () => { unSetToken(); push('login'); } },
+      { label: 'Dashboard', onClick: () => { push('/dashboard'); } },
       { label: 'Profile', onClick: () => { push('/profile'); } },
-      { label: 'Projects', onClick: () => { push('/project'); } },
+      { label: 'Projects', onClick: () => { push('/project/all'); } },
+      { label: 'Add Project', onClick: () => { push('/project/add'); } },
+      { label: 'Logout', onClick: () => { unSetToken(); push('/login'); } },
     ];
     return (
       <div>
