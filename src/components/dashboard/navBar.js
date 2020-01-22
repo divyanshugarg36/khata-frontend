@@ -15,10 +15,11 @@ class NavBar extends Component {
     const nav = [
       { label: 'Logout', onClick: () => { unSetToken(); push('login'); } },
       { label: 'Profile', onClick: () => { push('/profile'); } },
+      { label: 'Projects', onClick: () => { push('/project'); } },
     ];
     return (
       <div>
-        {nav.map(({ label, onClick }) => <span key={label} onClick={onClick}>{`${label} `}</span>)}
+        {nav.map(({ label, onClick }) => <button key={label} onClick={onClick}>{`${label} `}</button>)}
       </div>
     );
   }

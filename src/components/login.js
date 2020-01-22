@@ -6,7 +6,6 @@ import Input from './common/Input';
 import { API } from '../api';
 import { setToken, getToken } from '../utils';
 
-
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -35,39 +34,39 @@ class Login extends Component {
     };
     axios.post(API.login, data)
       .then(({ data }) => {
-        // console.log(data);
         const { success, token } = data;
         if (success) {
           setToken(token);
           push('/dashboard');
         }
       }).catch((error) => {
-        console.log(error);
+        window.alert(error.response.data.info || 'Could not login!');
       });
-    // console.log('i am called');
   }
 
   render() {
     const { onLogin } = this;
     const { history: { push } } = this.props;
     return (
-      <form onSubmit={onLogin}>
-        <Input
-          label="Username"
-          ref={this.username}
-        />
-        <Input
-          label="Password"
-          ref={this.password}
-          type="password"
-        />
-        <button>Login</button>
-        <div onClick={() => push('/register')}>Dont have an account</div>
-      </form>
+      <>
+        <h3>Login</h3>
+        <form onSubmit={onLogin}>
+          <Input
+            label="Username"
+            ref={this.username}
+          />
+          <Input
+            label="Password"
+            ref={this.password}
+            type="password"
+          />
+          <button>Login</button>
+          <div onClick={() => push('/register')}>Dont have an account</div>
+        </form>
+      </>
     );
   }
 }
-
 
 Login.propTypes = {
   history: PropTypes.instanceOf(Object).isRequired,

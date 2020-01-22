@@ -35,14 +35,14 @@ class Register extends Component {
     };
     axios.post(API.register, data)
       .then(({ data }) => {
-        console.log(data);
+        window.alert('Registered successfully!');
         const { success, token } = data;
         if (success) {
           setToken(token);
           push('/dashboard');
         }
       }).catch((error) => {
-        console.log(error);
+        window.alert(error.response.data.info || 'Could not register');
       });
   }
 
@@ -51,6 +51,7 @@ class Register extends Component {
     const { history: { push } } = this.props;
     return (
       <>
+        <h3>Register</h3>
         <form onSubmit={onRegister}>
           <Input
             label="Email"
