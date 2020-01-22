@@ -31,12 +31,12 @@ class Project extends Component {
     };
     axios.post(API.addProject, data)
       .then(({ data }) => {
-        console.log('Project added!', data);
+        window.alert('Project added!');
         const { assignments } = this.state;
         assignments.push(data.assignment);
         this.setState({ assignments });
-      }).catch((error) => {
-        console.log('Project not added!', error);
+      }).catch((err) => {
+        window.alert(err.response.data.info || 'Project not added!');
       });
   }
 

@@ -35,19 +35,20 @@ class Profile extends Component {
     axios.post(API.verifyPassword, { password: details.oldPassword })
       .then(() => {
         axios.put(API.update, details)
-          .then(({ data }) => {
-            console.log('Profile updated!', data);
-          }).catch((error) => {
-            console.log('Profile not updated!', error);
+          .then(() => {
+            window.alert('Profile updated!');
+          }).catch(() => {
+            window.alert('Profile not updated!');
           });
-      }).catch((error) => {
-        console.log("Password doesn't match!", error);
+      }).catch(() => {
+        window.alert('Old password is incorrect!');
       });
   }
 
   render() {
     return (
       <div>
+        <h3>Edit Profile</h3>
         <form onSubmit={this.updateProfile}>
           <Input
             label="Email"
