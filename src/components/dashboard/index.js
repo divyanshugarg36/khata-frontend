@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 // import axios from 'axios';
 import PropTypes from 'prop-types';
 // import { API } from '../../api';
-import NavBar from './navBar';
 import { getToken } from '../../utils';
 
 class Dashboard extends Component {
@@ -36,7 +35,6 @@ class Dashboard extends Component {
   render() {
     return (
       <>
-        <NavBar />
         <div>Welcome to the dashboard</div>
       </>
     );
