@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import Input from '../common/Input';
+import Select from '../common/Select';
 import { API } from '../../api';
 
 class AddProject extends Component {
@@ -12,6 +13,8 @@ class AddProject extends Component {
     };
     this.name = React.createRef();
     this.description = React.createRef();
+    this.price = React.createRef();
+    this.type = React.createRef();
   }
 
   addProject = (e) => {
@@ -19,9 +22,11 @@ class AddProject extends Component {
     const {
       name: { current: { value: name } },
       description: { current: { value: description } },
+      price: { current: { value: price } },
+      type: { current: { value: type } },
     } = this;
     const data = {
-      name, description,
+      name, description, price, type,
     };
     axios.post(API.addProject, data)
       .then(({ data }) => {
@@ -36,6 +41,7 @@ class AddProject extends Component {
 
   render() {
     const { addProject } = this;
+    const types = ['Hourly', 'Monthly', 'Other'];
     return (
       <>
         <h4>Add new project</h4>
@@ -47,6 +53,7 @@ class AddProject extends Component {
           <div className="textarea-container">
             <label htmlFor="description">
               Description
+              <br />
               <textarea
                 className="textarea"
                 id="description"
@@ -54,6 +61,16 @@ class AddProject extends Component {
               />
             </label>
           </div>
+          <Input
+            label="Price"
+            ref={this.price}
+            type="number"
+          />
+          <Select
+            label="Type"
+            ref={this.type}
+            options={types}
+          />
           <button>Add project</button>
         </form>
       </>

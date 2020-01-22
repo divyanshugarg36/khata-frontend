@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import { API } from '../../api';
 
@@ -8,6 +9,7 @@ class ProjectList extends Component {
     super(props);
     this.state = {
       assignments: [],
+      history: props.history,
     };
   }
 
@@ -18,8 +20,7 @@ class ProjectList extends Component {
   }
 
   render() {
-    const { assignments } = this.state;
-    const { history: { push } } = this.props;
+    const { assignments, history: { push } } = this.state;
     return (
       <>
         <h4>List of projects</h4>
@@ -42,5 +43,11 @@ class ProjectList extends Component {
     );
   }
 }
+
+ProjectList.propTypes = {
+  history: PropTypes.instanceOf(Object).isRequired,
+};
+
+ProjectList.defaultProps = {};
 
 export default withRouter(ProjectList);
