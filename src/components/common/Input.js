@@ -7,6 +7,7 @@ const Input = React.forwardRef((props, ref) => {
   return (
     <div className="input-container">
       <label htmlFor={newId}>{label}</label>
+      <br />
       <input
         ref={ref}
         id={newId}
