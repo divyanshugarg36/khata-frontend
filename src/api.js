@@ -1,4 +1,4 @@
-const HOST = 'http://localhost:1337/';
+const { REACT_APP_API_URL: HOST } = process.env;
 
 export const API = {
   // Authentication
@@ -15,4 +15,7 @@ export const API = {
   updateProject: `${HOST}project/update`,
   removeProject: `${HOST}project/remove`,
   fetchProjects: `${HOST}project/all`,
+
+  // Assignments
+  addMember: `${HOST}project/member/add`,
 };

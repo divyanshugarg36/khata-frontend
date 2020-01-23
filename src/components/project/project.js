@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import Input from '../common/Input';
+import Select from '../common/Select';
 import { API } from '../../api';
 
 class Project extends Component {
@@ -12,6 +14,10 @@ class Project extends Component {
       id,
       assignment: null,
     };
+
+    this.user = React.createRef();
+    this.price = React.createRef();
+    this.type = React.createRef();
   }
 
   componentDidMount() {
@@ -23,24 +29,76 @@ class Project extends Component {
       .catch((err) => console.log(err.response));
   }
 
+  addMember = () => {
+    const {
+      user: { current: { value: user } },
+      price: { current: { value: price } },
+      type: { current: { value: type } },
+    } = this;
+    const { id } = this.state;
+    const data = {
+      user,
+      project: id,
+      price,
+      type,
+    };
+    axios.post(API.addMember, data)
+      .then(({ data }) => {
+        this.setState({ assignment: data.assignment });
+        window.alert('User added!');
+      })
+      .catch((err) => window.alert(err.response.data.info || 'User not added!'));
+  }
+
   render() {
     const { assignment } = this.state;
+    const { addMember } = this;
+    const types = ['Hourly', 'Monthly', 'Other'];
     return (
       <>
         {assignment
         && (
           <div>
-            <strong> Name - </strong>
-            {assignment.project.name}
-            <br />
-            <strong> Description - </strong>
-            {assignment.project.description}
-            <br />
-            <strong> Price - </strong>
-            {assignment.price}
-            <br />
-            <strong> Type - </strong>
-            {assignment.type}
+            <div className="details-container">
+              <h3>Project Details - </h3>
+              <strong> Name - </strong>
+              {assignment.project.name}
+              <br />
+              <strong> Description - </strong>
+              {assignment.project.description}
+              <br />
+              <strong> Price - </strong>
+              {assignment.price}
+              <br />
+              <strong> Type - </strong>
+              {assignment.type}
+              <br />
+              <strong> Admin - </strong>
+              {assignment.project.contributors.admin.name}
+              <br />
+              <strong> Other members - </strong>
+              <ul>
+                {assignment.project.contributors.members.map((m) => <li key={m.id}>{m.name}</li>)}
+              </ul>
+            </div>
+            <div className="form-container">
+              <h3>Add new member - </h3>
+              <Input
+                label="Username"
+                ref={this.user}
+              />
+              <Input
+                label="Price"
+                ref={this.price}
+                type="number"
+              />
+              <Select
+                label="Username"
+                ref={this.type}
+                options={types}
+              />
+              <button onClick={addMember}>Add member</button>
+            </div>
           </div>
         )}
       </>
