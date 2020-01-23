@@ -9,6 +9,7 @@ class Profile extends Component {
     super(props);
     this.state = {};
 
+    this.name = React.createRef();
     this.email = React.createRef();
     this.username = React.createRef();
     this.oldPassword = React.createRef();
@@ -19,6 +20,7 @@ class Profile extends Component {
     e.preventDefault();
 
     const {
+      name,
       email,
       username,
       oldPassword,
@@ -26,6 +28,7 @@ class Profile extends Component {
     } = this;
 
     const details = {
+      name: name.current.value,
       email: email.current.value,
       username: username.current.value,
       oldPassword: oldPassword.current.value,
@@ -50,6 +53,10 @@ class Profile extends Component {
       <div>
         <h3>Edit Profile</h3>
         <form onSubmit={this.updateProfile}>
+          <Input
+            label="Name"
+            ref={this.name}
+          />
           <Input
             label="Email"
             ref={this.email}
