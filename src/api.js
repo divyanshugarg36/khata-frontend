@@ -1,4 +1,4 @@
-const HOST = 'http://localhost:1337/';
+const { REACT_APP_API_URL: HOST } = process.env;
 
 export const API = {
   // Authentication
