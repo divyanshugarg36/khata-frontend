@@ -19,7 +19,23 @@ class ProjectList extends Component {
       .catch((err) => console.log(err));
   }
 
+  removeProject = (id) => {
+    axios.post(API.removeProject, { id })
+      .then(() => {
+        const { assignments } = this.state;
+        assignments.forEach((item, index) => {
+          if (item.project.id === id) {
+            assignments.splice(index, 1);
+          }
+        });
+        this.setState({ assignments });
+        window.alert('Project removed!');
+      })
+      .catch((err) => console.log(err));
+  }
+
   render() {
+    const { removeProject } = this;
     const { assignments, history: { push } } = this.state;
     return (
       <>
@@ -34,6 +50,7 @@ class ProjectList extends Component {
             return (
               <li key={id}>
                 <strong onClick={() => { push(`/project/${id}`); }}>{name}</strong>
+                <button onClick={() => removeProject(id)}>Remove</button>
                 <p>{description}</p>
               </li>
             );
