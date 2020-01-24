@@ -50,11 +50,27 @@ class Project extends Component {
       .catch((err) => window.alert(err.response.data.info || 'User not added!'));
   }
 
+  removeMember = (user) => {
+    const { id: project } = this.state;
+    axios.post(API.removeMember, { user, project })
+      .then(() => {
+        const { assignment } = this.state;
+        const { members } = assignment.project.contributors;
+        members.forEach((item, index) => {
+          if (item.id === user) {
+            assignment.project.contributors.members.splice(index, 1);
+          }
+        });
+        this.setState({ assignment });
+        window.alert('User removed!');
+      })
+      .catch((err) => console.log(err));
+  }
+
   render() {
     const { assignment } = this.state;
-    const { addMember } = this;
+    const { addMember, removeMember } = this;
     const types = ['Hourly', 'Monthly', 'Other'];
-    console.log(assignment);
     return (
       <>
         {assignment
@@ -80,7 +96,12 @@ class Project extends Component {
                 <strong> Other members - </strong>
                 <ul>
                   {assignment.project.contributors.members.map(
-                    ({ id, name, username }) => <li key={id}>{name || username}</li>,
+                    ({ id, name, username }) => (
+                      <li key={id}>
+                        { name || username }
+                        <button onClick={() => removeMember(id)}> Remove </button>
+                      </li>
+                    ),
                   )}
                 </ul>
               </div>
