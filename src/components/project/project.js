@@ -54,53 +54,56 @@ class Project extends Component {
     const { assignment } = this.state;
     const { addMember } = this;
     const types = ['Hourly', 'Monthly', 'Other'];
+    console.log(assignment);
     return (
       <>
         {assignment
-        && (
-          <div>
-            <div className="details-container">
-              <h3>Project Details - </h3>
-              <strong> Name - </strong>
-              {assignment.project.name}
-              <br />
-              <strong> Description - </strong>
-              {assignment.project.description}
-              <br />
-              <strong> Price - </strong>
-              {assignment.price}
-              <br />
-              <strong> Type - </strong>
-              {assignment.type}
-              <br />
-              <strong> Admin - </strong>
-              {assignment.project.contributors.admin.name}
-              <br />
-              <strong> Other members - </strong>
-              <ul>
-                {assignment.project.contributors.members.map((m) => <li key={m.id}>{m.name}</li>)}
-              </ul>
+          && (
+            <div>
+              <div className="details-container">
+                <h3>Project Details - </h3>
+                <strong> Name - </strong>
+                {assignment.project.name}
+                <br />
+                <strong> Description - </strong>
+                {assignment.project.description}
+                <br />
+                <strong> Price - </strong>
+                {assignment.price}
+                <br />
+                <strong> Type - </strong>
+                {assignment.type}
+                <br />
+                <strong> Admin - </strong>
+                {assignment.project.contributors.admin.name}
+                <br />
+                <strong> Other members - </strong>
+                <ul>
+                  {assignment.project.contributors.members.map(
+                    ({ id, name, username }) => <li key={id}>{name || username}</li>,
+                  )}
+                </ul>
+              </div>
+              <div className="form-container">
+                <h3>Add new member - </h3>
+                <Input
+                  label="Username"
+                  ref={this.user}
+                />
+                <Input
+                  label="Price"
+                  ref={this.price}
+                  type="number"
+                />
+                <Select
+                  label="Username"
+                  ref={this.type}
+                  options={types}
+                />
+                <button onClick={addMember}>Add member</button>
+              </div>
             </div>
-            <div className="form-container">
-              <h3>Add new member - </h3>
-              <Input
-                label="Username"
-                ref={this.user}
-              />
-              <Input
-                label="Price"
-                ref={this.price}
-                type="number"
-              />
-              <Select
-                label="Username"
-                ref={this.type}
-                options={types}
-              />
-              <button onClick={addMember}>Add member</button>
-            </div>
-          </div>
-        )}
+          )}
       </>
     );
   }
