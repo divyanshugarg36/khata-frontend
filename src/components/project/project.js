@@ -12,7 +12,7 @@ class Project extends Component {
     const { match: { params: { id } } } = props;
     this.state = {
       id,
-      assignment: null,
+      project: null,
     };
 
     this.user = React.createRef();
@@ -24,7 +24,7 @@ class Project extends Component {
     const { id } = this.state;
     axios.post(API.viewProject, { id })
       .then(({ data }) => {
-        this.setState({ assignment: data.assignment });
+        this.setState({ project: data.project });
       })
       .catch((err) => console.log(err.response));
   }
@@ -44,7 +44,7 @@ class Project extends Component {
     };
     axios.post(API.addMember, data)
       .then(({ data }) => {
-        this.setState({ assignment: data.assignment });
+        this.setState({ project: data.project });
         window.alert('User added!');
       })
       .catch((err) => window.alert(err.response.data.info || 'User not added!'));
@@ -54,52 +54,54 @@ class Project extends Component {
     const { id: project } = this.state;
     axios.post(API.removeMember, { user, project })
       .then(() => {
-        const { assignment } = this.state;
-        const { members } = assignment.project.contributors;
-        members.forEach((item, index) => {
+        const { project } = this.state;
+        const { assignments } = project;
+        assignments.forEach((item, index) => {
           if (item.id === user) {
-            assignment.project.contributors.members.splice(index, 1);
+            assignments.splice(index, 1);
           }
         });
-        this.setState({ assignment });
+        this.setState({ project });
         window.alert('User removed!');
       })
       .catch((err) => console.log(err));
   }
 
   render() {
-    const { assignment } = this.state;
+    const { project } = this.state;
     const { addMember, removeMember } = this;
     const types = ['Hourly', 'Monthly', 'Other'];
     return (
       <>
-        {assignment
+        {project
           && (
             <div>
               <div className="details-container">
                 <h3>Project Details - </h3>
                 <strong> Name - </strong>
-                {assignment.project.name}
+                {project.name}
                 <br />
                 <strong> Description - </strong>
-                {assignment.project.description}
+                {project.description}
                 <br />
                 <strong> Price - </strong>
-                {assignment.price}
+                {project.admin.price}
                 <br />
                 <strong> Type - </strong>
-                {assignment.type}
+                {project.admin.type}
                 <br />
                 <strong> Admin - </strong>
-                {assignment.project.contributors.admin.name}
+                {project.admin.name || project.admin.username}
                 <br />
                 <strong> Other members - </strong>
                 <ul>
-                  {assignment.project.contributors.members.map(
+                  {project.assignments.map(
                     ({ id, name, username }) => (
                       <li key={id}>
                         { name || username }
-                        <button onClick={() => removeMember(id)}> Remove </button>
+                        { project.isAdmin && (
+                        <button onClick={() => removeMember(id)}>Remove</button>
+                        )}
                       </li>
                     ),
                   )}

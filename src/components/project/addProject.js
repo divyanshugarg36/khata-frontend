@@ -8,9 +8,7 @@ import { API } from '../../api';
 class AddProject extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      assignments: [],
-    };
+    this.state = {};
     this.name = React.createRef();
     this.description = React.createRef();
     this.price = React.createRef();
@@ -29,11 +27,8 @@ class AddProject extends Component {
       name, description, price, type,
     };
     axios.post(API.addProject, data)
-      .then(({ data }) => {
+      .then(() => {
         window.alert('Project added!');
-        const { assignments } = this.state;
-        assignments.push(data.assignment);
-        this.setState({ assignments });
       }).catch((err) => {
         window.alert(err.response.data.info || 'Project not added!');
       });
