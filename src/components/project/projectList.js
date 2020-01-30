@@ -8,27 +8,27 @@ class ProjectList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      assignments: [],
+      projects: [],
       history: props.history,
     };
   }
 
   componentDidMount() {
     axios.post(API.fetchProjects, {})
-      .then(({ data }) => this.setState({ assignments: data.assignment }))
+      .then(({ data }) => this.setState({ projects: data.projects }))
       .catch((err) => console.log(err));
   }
 
   removeProject = (id) => {
     axios.post(API.removeProject, { id })
       .then(() => {
-        const { assignments } = this.state;
-        assignments.forEach((item, index) => {
-          if (item.project.id === id) {
-            assignments.splice(index, 1);
+        const { projects } = this.state;
+        projects.forEach((item, index) => {
+          if (item.id === id) {
+            projects.splice(index, 1);
           }
         });
-        this.setState({ assignments });
+        this.setState({ projects });
         window.alert('Project removed!');
       })
       .catch((err) => console.log(err));
@@ -36,21 +36,24 @@ class ProjectList extends Component {
 
   render() {
     const { removeProject } = this;
-    const { assignments, history: { push } } = this.state;
+    const { projects, history: { push } } = this.state;
     return (
       <>
         <h4>List of projects</h4>
         <ul className="list-container">
-          { assignments.map((a) => {
+          { projects.map((p) => {
             const {
               description,
               id,
               name,
-            } = a.project;
+              isAdmin,
+            } = p;
             return (
               <li key={id}>
                 <strong onClick={() => { push(`/project/${id}`); }}>{name}</strong>
+                {isAdmin && (
                 <button onClick={() => removeProject(id)}>Remove</button>
+                )}
                 <p>{description}</p>
               </li>
             );

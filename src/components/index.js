@@ -12,6 +12,7 @@ import Profile from './profile';
 import AddProject from './project/addProject';
 import Project from './project/project';
 import ProjectList from './project/projectList';
+import History from './history';
 import { getToken } from '../utils';
 
 class Khata extends Component {
@@ -34,6 +35,7 @@ class Khata extends Component {
           <Route path="/project/add" component={AddProject} />
           <Route path="/project/all" component={ProjectList} />
           <Route path="/project/:id" component={Project} />
+          <Route path="/history" component={History} />
         </Switch>
       </div>
     );
