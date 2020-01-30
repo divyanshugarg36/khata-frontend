@@ -14,6 +14,7 @@ class NavBar extends Component {
     const { history: { push } } = this.props;
     const nav = [
       { label: 'Dashboard', onClick: () => { push('/dashboard'); } },
+      { label: 'History', onClick: () => { push('/history'); } },
       { label: 'Profile', onClick: () => { push('/profile'); } },
       { label: 'Projects', onClick: () => { push('/project/all'); } },
       { label: 'Add Project', onClick: () => { push('/project/add'); } },

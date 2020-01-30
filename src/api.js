@@ -17,4 +17,7 @@ export const API = {
   fetchProjects: `${HOST}project/all`,
   addMember: `${HOST}project/member/add`,
   removeMember: `${HOST}project/member/remove`,
+
+  // History
+  history: `${HOST}history`,
 };
