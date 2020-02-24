@@ -10,10 +10,10 @@ class Invoice extends Component {
   render() {
     return (
       <>
-         
+        <h3>Invoice</h3>
       </>
     );
   }
-};
+}
 
 export default withRouter(Invoice);
