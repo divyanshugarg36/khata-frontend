@@ -13,6 +13,7 @@ import AddProject from './project/addProject';
 import Project from './project/project';
 import ProjectList from './project/projectList';
 import History from './history';
+import Invoice from './invoice';
 import { getToken } from '../utils';
 
 class Khata extends Component {
@@ -36,6 +37,7 @@ class Khata extends Component {
           <Route path="/project/all" component={ProjectList} />
           <Route path="/project/:id" component={Project} />
           <Route path="/history" component={History} />
+          <Route path="/invoice" component={Invoice} />
         </Switch>
       </div>
     );
