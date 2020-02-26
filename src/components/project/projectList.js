@@ -46,14 +46,11 @@ class ProjectList extends Component {
               description,
               id,
               name,
-              isAdmin,
             } = p;
             return (
               <li key={id}>
                 <strong onClick={() => { push(`/project/${id}`); }}>{name}</strong>
-                {isAdmin && (
                 <button onClick={() => removeProject(id)}>Remove</button>
-                )}
                 <p>{description}</p>
               </li>
             );
