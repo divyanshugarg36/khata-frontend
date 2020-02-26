@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import Input from '../common/Input';
-import Select from '../common/Select';
 import { API } from '../../api';
 
 class AddProject extends Component {
@@ -10,9 +9,9 @@ class AddProject extends Component {
     super(props);
     this.state = {};
     this.name = React.createRef();
+    this.client = React.createRef();
+    this.role = React.createRef();
     this.description = React.createRef();
-    this.price = React.createRef();
-    this.type = React.createRef();
   }
 
   addProject = (e) => {
@@ -20,11 +19,11 @@ class AddProject extends Component {
     const {
       name: { current: { value: name } },
       description: { current: { value: description } },
-      price: { current: { value: price } },
-      type: { current: { value: type } },
+      client: { current: { value: client } },
+      role: { current: { value: role } },
     } = this;
     const data = {
-      name, description, price, type,
+      name, description, client, role,
     };
     axios.post(API.addProject, data)
       .then(() => {
@@ -36,7 +35,6 @@ class AddProject extends Component {
 
   render() {
     const { addProject } = this;
-    const types = ['Hourly', 'Monthly', 'Other'];
     return (
       <>
         <h4>Add new project</h4>
@@ -57,14 +55,12 @@ class AddProject extends Component {
             </label>
           </div>
           <Input
-            label="Price"
-            ref={this.price}
-            type="number"
+            label="Client"
+            ref={this.client}
           />
-          <Select
-            label="Type"
-            ref={this.type}
-            options={types}
+          <Input
+            label="Role"
+            ref={this.role}
           />
           <button>Add project</button>
         </form>
