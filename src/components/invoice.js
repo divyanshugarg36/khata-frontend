@@ -15,15 +15,26 @@ class Invoice extends Component {
         <div className="hr" />
         <div className="row flex">
           <div className="title">Invoice : B1</div>
-          <div className="content">Skillshape</div>
         </div>
         <div className="row flex">
-          <div className="title">Invoice : B1</div>
-          <div className="content">Skillshape</div>
+          <div className="title">Attention : </div>
+          <div className="content">
+            Sam Schikowitz
+            <br />
+            Skillshape
+          </div>
         </div>
         <div className="row flex">
-          <div className="title">Invoice : B1</div>
-          <div className="content">Skillshape</div>
+          <div className="title">Date : </div>
+          <div className="content">19/11/2019</div>
+        </div>
+        <div className="row flex">
+          <div className="title">Project Title : </div>
+          <div className="content">Product Management</div>
+        </div>
+        <div className="row flex">
+          <div className="title">Description : </div>
+          <div className="content">Invoice for Oct 2019</div>
         </div>
         <table className="employee-data">
           <thead>
@@ -37,9 +48,9 @@ class Invoice extends Component {
           <tbody>
             <tr>
               <td>Name</td>
-              <td>69 hours</td>
-              <td>6000000000000$</td>
-              <td>Infinity da symbol ni hga</td>
+              <td>70 hours</td>
+              <td>$60000</td>
+              <td>Infinity</td>
             </tr>
 
           </tbody>
