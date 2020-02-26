@@ -37,9 +37,9 @@ class Khata extends Component {
           <Route path="/profile" component={Profile} />
           <Route path="/project/add" component={AddProject} />
           <Route path="/project/all" component={ProjectList} />
+          <Route path="/project/:id/invoice" component={Invoice} />
           <Route path="/project/:id" component={Project} />
           <Route path="/history" component={History} />
-          <Route path="/invoice" component={Invoice} />
         </Switch>
       </div>
     );

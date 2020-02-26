@@ -16,6 +16,7 @@ class Project extends Component {
     };
 
     this.user = React.createRef();
+    this.role = React.createRef();
     this.price = React.createRef();
     this.type = React.createRef();
   }
@@ -32,6 +33,7 @@ class Project extends Component {
   addMember = () => {
     const {
       user: { current: { value: user } },
+      role: { current: { value: role } },
       price: { current: { value: price } },
       type: { current: { value: type } },
     } = this;
@@ -39,6 +41,7 @@ class Project extends Component {
     const data = {
       username: user,
       project: id,
+      role,
       price,
       type,
     };
@@ -107,6 +110,10 @@ class Project extends Component {
                 <Input
                   label="Username"
                   ref={this.user}
+                />
+                <Input
+                  label="Role"
+                  ref={this.role}
                 />
                 <Input
                   label="Price"

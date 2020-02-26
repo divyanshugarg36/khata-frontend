@@ -50,6 +50,7 @@ class ProjectList extends Component {
             return (
               <li key={id}>
                 <strong onClick={() => { push(`/project/${id}`); }}>{name}</strong>
+                <button onClick={() => { push(`/project/${id}/invoice`); }}>Generate Invoice</button>
                 <button onClick={() => removeProject(id)}>Remove</button>
                 <p>{description}</p>
               </li>
