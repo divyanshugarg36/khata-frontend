@@ -22,4 +22,7 @@ export const API = {
 
   // History
   history: `${HOST}history`,
+
+  // Invoice
+  createInvoice: `${HOST}invoice/create`,
 };

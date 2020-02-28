@@ -23,6 +23,16 @@ class Invoice extends Component {
       .catch((err) => console.log(err.response));
   }
 
+  save = (project) => {
+    axios.post(API.createInvoice, { invoiceNumber: 'B1', project })
+      .then(({ data }) => {
+        if (data.success) {
+          window.alert('Invoice saved!');
+        }
+      })
+      .catch((err) => console.log(err.response));
+  }
+
   render() {
     const { project: p } = this.state;
     if (!p) return null;
@@ -78,6 +88,7 @@ class Invoice extends Component {
           Total: $
           {p.assignments.reduce((a, b) => Number(a.price) + Number(b.price))}
         </div>
+        <button onClick={() => { this.save(p); }}>Save Invoice</button>
       </div>
     );
   }
