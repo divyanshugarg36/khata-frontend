@@ -48,19 +48,24 @@ class Invoice extends Component {
   }
 
   saveCell = (event, row, col, cell) => {
-    const { value } = event.target;
+    let { value } = event.target;
     const { project, project: { assignments } } = this.state;
     const colName = col === 0 ? 'title' : 'hours';
+    const R = assignments[row];
+    value = value === '' ? '0' : value;
 
-    if (colName === 'hours') {
-      const newCost = assignments[row].price * value;
-      project.total += newCost - assignments[row].cost;
-      assignments[row].cost = newCost;
-    }
-    assignments[row][colName] = value;
-
-    this.setState({ project });
     ReactDOM.unmountComponentAtNode(cell);
+    if (R[colName] !== value) {
+      if (colName === 'hours') {
+        const newCost = R.price * value;
+        project.total += newCost - R.cost;
+        R.cost = newCost;
+      }
+      R[colName] = value;
+    } else {
+      ReactDOM.render(R[colName], cell);
+    }
+    this.setState({ project });
   }
 
   editCell = (event, row, col) => {
@@ -71,10 +76,10 @@ class Invoice extends Component {
         onBlur={(e) => { this.saveCell(e, row, col, cell); }}
         type={col === 0 ? 'text' : 'number'}
         defaultValue={value}
-        min="0"
       />,
       cell,
     );
+    cell.querySelector('input').focus();
   }
 
   render() {
