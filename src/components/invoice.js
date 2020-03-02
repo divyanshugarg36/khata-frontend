@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -10,21 +11,34 @@ class Invoice extends Component {
     const { match: { params: { id } } } = props;
     this.state = {
       id,
+      invoiceNumber: Math.random().toString(32).slice(2, 7).toUpperCase(),
       project: null,
     };
+
+    this.description = React.createRef();
   }
 
   componentDidMount() {
     const { id } = this.state;
     axios.post(API.viewProject, { id })
       .then(({ data }) => {
+        const { assignments } = data.project;
+        data.project.total = 0;
+        data.project.assignments = assignments.map((a) => {
+          a.title = `${a.role} (${a.name})`;
+          a.hours = 0;
+          a.cost = a.hours * a.price;
+          data.project.total += a.cost;
+          return a;
+        });
         this.setState({ project: data.project });
       })
       .catch((err) => console.log(err.response));
   }
 
-  save = (project) => {
-    axios.post(API.createInvoice, { invoiceNumber: 'B1', project })
+  save = () => {
+    const { project, invoiceNumber } = this.state;
+    axios.post(API.createInvoice, { invoiceNumber, project })
       .then(({ data }) => {
         if (data.success) {
           window.alert('Invoice saved!');
@@ -33,8 +47,39 @@ class Invoice extends Component {
       .catch((err) => console.log(err.response));
   }
 
+  saveCell = (event, row, col, cell) => {
+    const { value } = event.target;
+    const { project, project: { assignments } } = this.state;
+    const colName = col === 0 ? 'title' : 'hours';
+
+    if (colName === 'hours') {
+      const newCost = assignments[row].price * value;
+      project.total += newCost - assignments[row].cost;
+      assignments[row].cost = newCost;
+    }
+    assignments[row][colName] = value;
+
+    this.setState({ project });
+    ReactDOM.unmountComponentAtNode(cell);
+  }
+
+  editCell = (event, row, col) => {
+    const cell = event.target;
+    const value = cell.innerHTML;
+    ReactDOM.render(
+      <input
+        onBlur={(e) => { this.saveCell(e, row, col, cell); }}
+        type={col === 0 ? 'text' : 'number'}
+        defaultValue={value}
+        min="0"
+      />,
+      cell,
+    );
+  }
+
   render() {
-    const { project: p } = this.state;
+    const { save, editCell } = this;
+    const { project: p, invoiceNumber } = this.state;
     if (!p) return null;
     return (
       <div className="invoice">
@@ -42,7 +87,10 @@ class Invoice extends Component {
         <div className="sub-header">RYAZIO TECHNOLOGIES LLP</div>
         <div className="hr" />
         <div className="row flex">
-          <div className="title">Invoice : B1</div>
+          <div className="title">
+            Invoice:
+            { invoiceNumber }
+          </div>
         </div>
         <div className="row flex">
           <div className="title">Attention : </div>
@@ -64,31 +112,31 @@ class Invoice extends Component {
           <div className="title">Description : </div>
           <div className="content">{ p.description }</div>
         </div>
-        <table className="employee-data">
+        <table role="grid" className="employee-data">
           <thead>
             <tr>
-              <td>Item</td>
-              <td>Total Hours</td>
-              <td>Unit Price</td>
-              <td>Cost</td>
+              <th>Item</th>
+              <th>Total Hours</th>
+              <th>Unit Price</th>
+              <th>Cost</th>
             </tr>
           </thead>
           <tbody>
-            { p.assignments.map((a) => (
+            { p.assignments.map((a, i) => (
               <tr key={a.id}>
-                <td>{`${a.role} (${a.name})`}</td>
-                <td>--</td>
+                <td role="gridcell" onClick={(e) => { editCell(e, i, 0); }}>{a.title}</td>
+                <td role="gridcell" onClick={(e) => { editCell(e, i, 1); }}>{a.hours}</td>
                 <td>{a.price}</td>
-                <td>{a.price}</td>
+                <td>{a.cost}</td>
               </tr>
             ))}
           </tbody>
         </table>
         <div className="total">
           Total: $
-          {p.assignments.reduce((a, b) => Number(a.price) + Number(b.price))}
+          {p.total}
         </div>
-        <button onClick={() => { this.save(p); }}>Save Invoice</button>
+        <button onClick={() => { save(p); }}>Save Invoice</button>
       </div>
     );
   }
