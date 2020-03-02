@@ -14,17 +14,14 @@ class History extends Component {
   componentDidMount() {
     axios.post(API.fetchProjects, {})
       .then(({ data }) => {
-        console.log(data);
         const assignments = [];
         Object.values(data.projects).forEach((p) => {
-          if (p.isAdmin) {
-            assignments.push({
-              date: new Date(p.createdAt),
-              name: p.name,
-              user: p.admin.name || p.admin.username,
-              message: 'created a project',
-            });
-          }
+          assignments.push({
+            date: new Date(p.createdAt),
+            name: p.name,
+            user: '',
+            message: 'A new project created ',
+          });
           p.assignments.forEach((a) => {
             assignments.push({
               date: new Date(a.createdAt),

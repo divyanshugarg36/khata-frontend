@@ -16,6 +16,7 @@ class Project extends Component {
     };
 
     this.user = React.createRef();
+    this.role = React.createRef();
     this.price = React.createRef();
     this.type = React.createRef();
   }
@@ -32,17 +33,19 @@ class Project extends Component {
   addMember = () => {
     const {
       user: { current: { value: user } },
+      role: { current: { value: role } },
       price: { current: { value: price } },
       type: { current: { value: type } },
     } = this;
     const { id } = this.state;
     const data = {
-      user,
+      username: user,
       project: id,
+      role,
       price,
       type,
     };
-    axios.post(API.addMember, data)
+    axios.post(API.assignMember, data)
       .then(({ data }) => {
         this.setState({ project: data.project });
         window.alert('User added!');
@@ -50,14 +53,14 @@ class Project extends Component {
       .catch((err) => window.alert(err.response.data.info || 'User not added!'));
   }
 
-  removeMember = (user) => {
+  removeMember = (userId) => {
     const { id: project } = this.state;
-    axios.post(API.removeMember, { user, project })
+    axios.post(API.removeMember, { userId, project })
       .then(() => {
         const { project } = this.state;
         const { assignments } = project;
         assignments.forEach((item, index) => {
-          if (item.id === user) {
+          if (item.id === userId) {
             assignments.splice(index, 1);
           }
         });
@@ -84,34 +87,33 @@ class Project extends Component {
                 <strong> Description - </strong>
                 {project.description}
                 <br />
-                <strong> Price - </strong>
-                {project.admin.price}
+                <strong> Client - </strong>
+                {project.client}
                 <br />
-                <strong> Type - </strong>
-                {project.admin.type}
+                <strong> Role - </strong>
+                {project.role}
                 <br />
-                <strong> Admin - </strong>
-                {project.admin.name || project.admin.username}
-                <br />
-                <strong> Other members - </strong>
+                <strong>Members - </strong>
                 <ul>
                   {project.assignments.map(
                     ({ id, name, username }) => (
                       <li key={id}>
                         { name || username }
-                        { project.isAdmin && (
                         <button onClick={() => removeMember(id)}>Remove</button>
-                        )}
                       </li>
                     ),
                   )}
                 </ul>
               </div>
               <div className="form-container">
-                <h3>Add new member - </h3>
+                <h3>Add member to project - </h3>
                 <Input
                   label="Username"
                   ref={this.user}
+                />
+                <Input
+                  label="Role"
+                  ref={this.role}
                 />
                 <Input
                   label="Price"
