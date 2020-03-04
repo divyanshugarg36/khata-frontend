@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import Input from '../common/Input';
 import { API } from '../../api';
 
@@ -26,8 +27,10 @@ class AddProject extends Component {
       name, description, client, role,
     };
     axios.post(API.addProject, data)
-      .then(() => {
+      .then(({ data }) => {
         window.alert('Project added!');
+        const { onAdd } = this.props;
+        onAdd(data.project);
       }).catch((err) => {
         window.alert(err.response.data.info || 'Project not added!');
       });
@@ -68,5 +71,11 @@ class AddProject extends Component {
     );
   }
 }
+
+AddProject.propTypes = {
+  onAdd: PropTypes.func.isRequired,
+};
+
+AddProject.defaultProps = {};
 
 export default withRouter(AddProject);

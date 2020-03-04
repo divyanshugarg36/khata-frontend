@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
-import Input from './common/Input';
-import { API } from '../api';
+import PropTypes from 'prop-types';
+import Input from '../common/Input';
+import { API } from '../../api';
 
 class AddMember extends Component {
   constructor(props) {
@@ -27,8 +28,10 @@ class AddMember extends Component {
       isMember: true,
     };
     axios.post(API.addMember, data)
-      .then(() => {
+      .then(({ data }) => {
         window.alert('Member added!');
+        const { onAdd } = this.props;
+        onAdd(data.user);
       })
       .catch((err) => window.alert(err.response.data.info || 'Member not added!'));
   }
@@ -58,5 +61,11 @@ class AddMember extends Component {
     );
   }
 }
+
+AddMember.propTypes = {
+  onAdd: PropTypes.func.isRequired,
+};
+
+AddMember.defaultProps = {};
 
 export default withRouter(AddMember);
