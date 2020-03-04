@@ -5,7 +5,7 @@ import axios from 'axios';
 import Input from '../common/Input';
 import { API } from '../../api';
 
-class Member extends Component {
+class EditMember extends Component {
   constructor(props) {
     super(props);
     const { match: { params: { id } } } = props;
@@ -95,11 +95,11 @@ class Member extends Component {
   }
 }
 
-Member.propTypes = {
+EditMember.propTypes = {
   match: PropTypes.instanceOf(Object).isRequired,
   history: PropTypes.instanceOf(Object).isRequired,
 };
 
-Member.defaultProps = {};
+EditMember.defaultProps = {};
 
-export default withRouter(Member);
+export default withRouter(EditMember);
