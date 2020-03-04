@@ -7,9 +7,11 @@ export const API = {
 
   // User
   addMember: `${HOST}user/add`,
+  deleteMember: `${HOST}user/remove`,
   register: `${HOST}register`,
   update: `${HOST}user/update`,
   fetchUsers: `${HOST}user/all`,
+  fetchUser: `${HOST}user/fetch`,
 
   // Project
   addProject: `${HOST}project/add`,
