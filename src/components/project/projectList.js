@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import AddProject from './addProject';
 import { API } from '../../api';
 
 class ProjectList extends Component {
@@ -19,26 +20,19 @@ class ProjectList extends Component {
       .catch((err) => console.log(err));
   }
 
-  removeProject = (id) => {
-    axios.post(API.removeProject, { id })
-      .then(() => {
-        const { projects } = this.state;
-        projects.forEach((item, index) => {
-          if (item.id === id) {
-            projects.splice(index, 1);
-          }
-        });
-        this.setState({ projects });
-        window.alert('Project removed!');
-      })
-      .catch((err) => console.log(err));
+  updateList = (project) => {
+    if (project) {
+      const { projects } = this.state;
+      projects.push(project);
+      this.setState({ projects });
+    }
   }
 
   render() {
-    const { removeProject } = this;
     const { projects, history: { push } } = this.state;
     return (
       <>
+        <AddProject onAdd={this.updateList} />
         <h4>List of projects</h4>
         <ul className="list-container">
           { projects.map((p) => {
@@ -50,8 +44,6 @@ class ProjectList extends Component {
             return (
               <li key={id}>
                 <strong onClick={() => { push(`/project/${id}`); }}>{name}</strong>
-                <button onClick={() => { push(`/project/${id}/invoice`); }}>Generate Invoice</button>
-                <button onClick={() => removeProject(id)}>Remove</button>
                 <p>{description}</p>
               </li>
             );
