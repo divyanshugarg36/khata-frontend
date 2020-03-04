@@ -14,6 +14,7 @@ import MemberList from './member/memberList';
 import EditMember from './member/editMember';
 import AddProject from './project/addProject';
 import Project from './project/project';
+import EditProject from './project/editProject';
 import ProjectList from './project/projectList';
 import History from './history';
 import Invoice from './invoice';
@@ -41,6 +42,7 @@ class Khata extends Component {
           <Route path="/profile" component={Profile} />
           <Route path="/project/add" component={AddProject} />
           <Route path="/project/all" component={ProjectList} />
+          <Route path="/project/edit/:id" component={EditProject} />
           <Route path="/project/:id/invoice" component={Invoice} />
           <Route path="/project/:id" component={Project} />
           <Route path="/history" component={History} />
