@@ -13,6 +13,7 @@ class Project extends Component {
     this.state = {
       id,
       project: null,
+      history: props.history,
     };
 
     this.user = React.createRef();
@@ -70,9 +71,19 @@ class Project extends Component {
       .catch((err) => console.log(err));
   }
 
+  removeProject = () => {
+    const { id, history: { push } } = this.state;
+    axios.post(API.removeProject, { id })
+      .then(() => {
+        push('/project/all');
+        window.alert('Project removed!');
+      })
+      .catch((err) => console.log(err));
+  }
+
   render() {
-    const { project } = this.state;
-    const { addMember, removeMember } = this;
+    const { id, project, history: { push } } = this.state;
+    const { removeProject, addMember, removeMember } = this;
     const types = ['Hourly', 'Monthly', 'Other'];
     return (
       <>
@@ -81,6 +92,9 @@ class Project extends Component {
             <div>
               <div className="details-container">
                 <h3>Project Details - </h3>
+                <button onClick={() => { push(`/project/${id}/invoice`); }}>Generate Invoice</button>
+                <button onClick={() => removeProject()}>Remove</button>
+                <br />
                 <strong> Name - </strong>
                 {project.name}
                 <br />
@@ -136,6 +150,7 @@ class Project extends Component {
 
 Project.propTypes = {
   match: PropTypes.instanceOf(Object).isRequired,
+  history: PropTypes.instanceOf(Object).isRequired,
 };
 
 Project.defaultProps = {};
