@@ -78,10 +78,10 @@ class Invoice extends Component {
         onBlur={(e) => { this.saveCell(e, row, col, cell); }}
         type={col === 0 ? 'text' : 'number'}
         defaultValue={value}
+        ref={(i) => i && i.focus()}
       />,
       cell,
     );
-    cell.querySelector('input').focus();
   }
 
   generatePdf = () => {
