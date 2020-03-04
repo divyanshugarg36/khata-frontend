@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import html2canvas from 'html2canvas';
+import JsPdf from 'jspdf';
 import { API } from '../api';
 
 class Invoice extends Component {
@@ -82,12 +84,29 @@ class Invoice extends Component {
     cell.querySelector('input').focus();
   }
 
+  generatePdf = () => {
+    const domElement = document.getElementById('invoice');
+    html2canvas(domElement,
+      {
+        scale: 2,
+        onclone: (document) => {
+          document.getElementById('printBtn').style.visibility = 'hidden';
+        },
+      })
+      .then((canvas) => {
+        const img = canvas.toDataURL('image/png');
+        const pdf = new JsPdf('l', 'pt', [canvas.width, canvas.height]);
+        pdf.addImage(img, 'JPEG', 0, 0, canvas.width, canvas.height);
+        pdf.save('your-filename.pdf');
+      });
+  }
+
   render() {
-    const { save, editCell } = this;
+    const { save, generatePdf, editCell } = this;
     const { project: p, invoiceNumber } = this.state;
     if (!p) return null;
     return (
-      <div className="invoice">
+      <div className="invoice" id="invoice">
         <h1 className="logo">RYAZ</h1>
         <div className="sub-header">RYAZIO TECHNOLOGIES LLP</div>
         <div className="hr" />
@@ -141,7 +160,8 @@ class Invoice extends Component {
           Total: $
           {p.total}
         </div>
-        <button onClick={() => { save(p); }}>Save Invoice</button>
+        <button onClick={() => { save(); }}>Save Invoice</button>
+        <button id="printBtn" onClick={() => { generatePdf(); }}>Generate PDF</button>
       </div>
     );
   }
