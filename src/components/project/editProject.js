@@ -41,14 +41,14 @@ class EditProject extends Component {
       name: { current: { value: name } },
       description: { current: { value: description } },
       client: { current: { value: client } },
-      role: { current: { value: role } },
+      projectRole: { current: { value: projectRole } },
     } = this;
     const data = {
       id,
       name,
       description,
       client,
-      role,
+      role: projectRole,
     };
     axios.put(API.updateProject, { data, id })
       .then(() => {
