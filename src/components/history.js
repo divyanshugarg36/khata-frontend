@@ -2,63 +2,54 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { API } from '../api';
+import messages from '../const/historyInfo';
 
 class History extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      assignments: [],
+      history: [],
+      filtered: [],
+      filters: ['All', ...Object.keys(messages)],
     };
   }
 
   componentDidMount() {
-    axios.post(API.fetchProjects, {})
+    axios.post(API.history)
       .then(({ data }) => {
-        const assignments = [];
-        Object.values(data.projects).forEach((p) => {
-          assignments.push({
-            date: new Date(p.createdAt),
-            name: p.name,
-            user: '',
-            message: 'A new project created ',
-          });
-          p.assignments.forEach((a) => {
-            assignments.push({
-              date: new Date(a.createdAt),
-              name: p.name,
-              user: a.name || a.username,
-              message: 'added to the project',
-            });
-            if (!a.active) {
-              assignments.push({
-                date: new Date(a.unassignedAt),
-                name: p.name,
-                user: a.name || a.username,
-                message: 'removed from the project',
-              });
-            }
-          });
-        });
-        assignments.sort((a, b) => a.date - b.date);
-        this.setState({ assignments });
+        this.setState({ history: data.history, filtered: data.history });
       })
       .catch((err) => console.log(err));
   }
 
+  filter = (message) => {
+    const { history } = this.state;
+    let filtered = history.filter((item) => item.message === message);
+    if (message === 'All') {
+      filtered = history;
+    }
+    this.setState({ filtered });
+  }
+
   render() {
-    const { assignments } = this.state;
+    const { filtered, filters } = this.state;
     return (
       <>
         <h4>History</h4>
+        {filters.map((m) => (
+          <button key={m} onClick={() => this.filter(m)} style={{ textTransform: 'capitalize' }}>
+            {m.replace('_', ' ').toLowerCase()}
+          </button>
+        ))}
         <ul>
-          { assignments.map((a, key) => (
+          { filtered.map((item, key) => (
             <li key={key}>
-              <strong>{a.user}</strong>
-              {` ${a.message} `}
-              <u>{a.name}</u>
+              <strong>{item.member}</strong>
+              {` ${messages[item.message]} `}
+              <u>{item.name}</u>
               <br />
               <small>
-                {`${a.date.toDateString()}, ${a.date.toLocaleTimeString('en-US')}`}
+                {`${new Date(item.date).toDateString()}, ${new Date(item.date).toLocaleTimeString('en-US')}`}
               </small>
               <br />
               <br />
