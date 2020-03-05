@@ -23,7 +23,7 @@ export const API = {
   removeMember: `${HOST}project/member/remove`,
 
   // History
-  history: `${HOST}history`,
+  history: `${HOST}history/get`,
 
   // Invoice
   createInvoice: `${HOST}invoice/create`,
