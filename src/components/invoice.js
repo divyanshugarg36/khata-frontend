@@ -15,9 +15,11 @@ class Invoice extends Component {
       id,
       invoiceNumber: Math.random().toString(32).slice(2, 7).toUpperCase(),
       project: null,
+      editMode: {
+        active: false,
+        row: 0,
+      },
     };
-
-    this.description = React.createRef();
   }
 
   componentDidMount() {
@@ -28,12 +30,12 @@ class Invoice extends Component {
         data.project.total = 0;
         data.project.assignments = assignments.map((a) => {
           a.title = `${a.role} (${a.name})`;
-          a.hours = 0;
-          a.cost = a.hours * a.price;
-          data.project.total += a.cost;
+          a.hours = a.type === 'Hourly' ? 0 : 'NA';
+          a.tasks = [];
           return a;
         });
         this.setState({ project: data.project });
+        this.calculateCosts();
       })
       .catch((err) => console.log(err.response));
   }
@@ -71,8 +73,10 @@ class Invoice extends Component {
   }
 
   editCell = (event, row, col) => {
-    const cell = event.target;
+    if (event.target.tagName !== 'TD') return;
+    const cell = event.target.querySelector('span');
     const value = cell.innerHTML;
+    if (value === 'NA') return;
     ReactDOM.render(
       <input
         onBlur={(e) => { this.saveCell(e, row, col, cell); }}
@@ -90,7 +94,7 @@ class Invoice extends Component {
       {
         scale: 2,
         onclone: (document) => {
-          document.getElementById('printBtn').style.visibility = 'hidden';
+          document.querySelectorAll('button').forEach((b) => { b.style.visibility = 'hidden'; });
         },
       })
       .then((canvas) => {
@@ -101,12 +105,96 @@ class Invoice extends Component {
       });
   }
 
+  editSubTasks = (row) => {
+    const { editMode, project } = this.state;
+    editMode.active = true;
+    editMode.row = row;
+    this.setState({ editMode });
+    if (project.assignments[editMode.row].tasks.length === 0) {
+      this.addRow();
+    }
+  };
+
+  addRow = () => {
+    const { editMode, project } = this.state;
+    project.assignments[editMode.row].tasks.push({ title: '', hours: 0 });
+    this.setState({ project });
+  }
+
+  removeRow = (taskNo) => {
+    const { editMode, project } = this.state;
+    project.assignments[editMode.row].tasks.splice(taskNo, 1);
+    this.setState({ project });
+    this.calculateCosts();
+  }
+
+  updateSubTasks = (event, taskNo, col) => {
+    const { value } = event.target;
+    const { editMode, project } = this.state;
+    const item = project.assignments[editMode.row];
+    item.tasks[taskNo][col] = value;
+    if (col === 'hours') {
+      this.calculateCosts();
+    }
+    this.setState({ project });
+  }
+
+  calculateCosts = () => {
+    const { project } = this.state;
+    let total = 0;
+    project.assignments.forEach((a) => {
+      if (a.hours !== 'NA' && a.tasks.length) {
+        let hours = 0;
+        a.tasks.forEach((t) => { hours += Number(t.hours); });
+        a.hours = hours;
+      }
+      a.cost = a.hours === 'NA' ? a.price : a.hours * a.price;
+      total += Number(a.cost);
+    });
+    project.total = total;
+    this.setState({ project });
+  }
+
   render() {
-    const { save, generatePdf, editCell } = this;
-    const { project: p, invoiceNumber } = this.state;
+    const {
+      save,
+      generatePdf,
+      editCell,
+      editSubTasks,
+      addRow,
+      removeRow,
+      updateSubTasks,
+    } = this;
+    const { project: p, invoiceNumber, editMode } = this.state;
     if (!p) return null;
     return (
       <div className="invoice" id="invoice">
+        {editMode.active && (
+          <div className="edit-mode-table">
+            <br />
+            <table border="1">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Hours</th>
+                  <th><button onClick={addRow}>Add row</button></th>
+                </tr>
+              </thead>
+              <tbody>
+                {p.assignments[editMode.row].tasks.map((t, i) => (
+                  <tr key={Math.random().toString(32).slice(2, 7)}>
+                    <td><input onBlur={(e) => updateSubTasks(e, i, 'title')} type="text" defaultValue={t.title} /></td>
+                    <td><input onBlur={(e) => updateSubTasks(e, i, 'hours')} type="number" defaultValue={t.hours} /></td>
+                    <td><button onClick={() => removeRow(i)}>x</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button onClick={() => this.setState({ editMode: { active: false, row: 0 } })}>
+              Save Tasks
+            </button>
+          </div>
+        )}
         <h1 className="logo">RYAZ</h1>
         <div className="sub-header">RYAZIO TECHNOLOGIES LLP</div>
         <div className="hr" />
@@ -148,8 +236,15 @@ class Invoice extends Component {
           <tbody>
             { p.assignments.map((a, i) => (
               <tr key={a.id}>
-                <td role="gridcell" onClick={(e) => { editCell(e, i, 0); }}>{a.title}</td>
-                <td role="gridcell" onClick={(e) => { editCell(e, i, 1); }}>{a.hours}</td>
+                <td role="gridcell" onClick={(e) => { editCell(e, i, 0); }}>
+                  <span>{a.title}</span>
+                  {a.type === 'Hourly' && <button style={{ float: 'right' }} onClick={() => editSubTasks(i)}>Edit Sub-tasks</button>}
+                  {!!a.tasks.length && <ul>{a.tasks.map((t, i) => <li key={i}>{t.title}</li>)}</ul>}
+                </td>
+                <td role="gridcell" onClick={(e) => { editCell(e, i, 1); }}>
+                  <span>{a.hours}</span>
+                  {a.tasks && <ul>{a.tasks.map((t, i) => <li key={i}>{t.hours}</li>)}</ul>}
+                </td>
                 <td>{a.price}</td>
                 <td>{a.cost}</td>
               </tr>
