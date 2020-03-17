@@ -13,6 +13,7 @@ class AddMember extends Component {
     this.username = React.createRef();
     this.name = React.createRef();
     this.email = React.createRef();
+    this.togglUid = React.createRef();
   }
 
   addMember = () => {
@@ -20,12 +21,15 @@ class AddMember extends Component {
       username: { current: { value: username } },
       name: { current: { value: name } },
       email: { current: { value: email } },
+      togglUid: { current: { value: togglUid } },
     } = this;
     const data = {
       username,
       name,
       email,
-      isMember: true,
+      toggl: {
+        uid: togglUid,
+      },
     };
     axios.post(API.addMember, data)
       .then(({ data }) => {
@@ -54,6 +58,11 @@ class AddMember extends Component {
             label="Email"
             ref={this.email}
             type="email"
+          />
+          <Input
+            label="Toggl UID"
+            type="number"
+            ref={this.togglUid}
           />
           <button onClick={addMember}>Add member</button>
         </div>
