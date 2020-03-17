@@ -27,4 +27,7 @@ export const API = {
 
   // Invoice
   createInvoice: `${HOST}invoice/create`,
+  saveInvoice: `${HOST}invoice/save`,
+  getInvoices: `${HOST}invoice/all`,
+  viewInvoice: `${HOST}invoice/view`,
 };

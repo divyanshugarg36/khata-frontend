@@ -18,6 +18,7 @@ class NavBar extends Component {
       { label: 'Profile', onClick: () => { push('/profile'); } },
       { label: 'Projects', onClick: () => { push('/project/all'); } },
       { label: 'Members', onClick: () => { push('/member/all'); } },
+      { label: 'Invoices', onClick: () => { push('/invoice/all'); } },
       { label: 'Logout', onClick: () => { unSetToken(); push('/login'); } },
     ];
     return (
