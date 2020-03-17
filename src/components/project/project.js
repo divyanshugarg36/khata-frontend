@@ -69,9 +69,7 @@ class Project extends Component {
                 </ul>
               </div>
               <button onClick={() => { push(`/project/edit/${id}`); }}>Edit Project</button>
-              <button onClick={() => { push(`/project/${id}/invoice`); }}>Generate Invoice</button>
               <button onClick={() => removeProject()}>Remove</button>
-
             </div>
           )}
       </>
