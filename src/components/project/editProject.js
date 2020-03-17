@@ -19,6 +19,7 @@ class EditProject extends Component {
     this.description = React.createRef();
     this.client = React.createRef();
     this.projectRole = React.createRef();
+    this.togglId = React.createRef();
 
     this.user = React.createRef();
     this.role = React.createRef();
@@ -42,6 +43,7 @@ class EditProject extends Component {
       description: { current: { value: description } },
       client: { current: { value: client } },
       projectRole: { current: { value: projectRole } },
+      togglId: { current: { value: togglId } },
     } = this;
     const data = {
       id,
@@ -49,6 +51,7 @@ class EditProject extends Component {
       description,
       client,
       role: projectRole,
+      togglId,
     };
     axios.put(API.updateProject, { data, id })
       .then(() => {
@@ -136,6 +139,12 @@ class EditProject extends Component {
                 label="Role"
                 ref={this.projectRole}
                 value={project.role}
+              />
+              <Input
+                label="Toggl ID"
+                ref={this.togglId}
+                value={project.togglId}
+                type="number"
               />
               <button onClick={update}>Update</button>
               <br />
