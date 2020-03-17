@@ -13,6 +13,7 @@ class AddProject extends Component {
     this.client = React.createRef();
     this.role = React.createRef();
     this.description = React.createRef();
+    this.togglId = React.createRef();
   }
 
   addProject = (e) => {
@@ -22,9 +23,10 @@ class AddProject extends Component {
       description: { current: { value: description } },
       client: { current: { value: client } },
       role: { current: { value: role } },
+      togglId: { current: { value: togglId } },
     } = this;
     const data = {
-      name, description, client, role,
+      name, description, client, role, togglId,
     };
     axios.post(API.addProject, data)
       .then(({ data }) => {
@@ -64,6 +66,11 @@ class AddProject extends Component {
           <Input
             label="Role"
             ref={this.role}
+          />
+          <Input
+            label="Toggl ID"
+            ref={this.togglId}
+            type="number"
           />
           <button>Add project</button>
         </form>

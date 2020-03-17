@@ -26,9 +26,54 @@ class Invoice extends Component {
     axios.post(API.viewInvoice, { id })
       .then(({ data }) => {
         this.setState({ invoice: data.invoice });
-        this.calculateCosts();
+        this.fetchTogglHours();
       })
       .catch((err) => console.log(err.response));
+  }
+
+  fetchTogglHours = () => {
+    axios.post(API.fetchUser)
+      .then(({ data }) => {
+        const { toggl, email } = data.user;
+        const { workspaceId, apiToken } = toggl;
+        const { invoice: { start, end } } = this.state;
+        const info = {
+          page: 1,
+          totalCount: 0,
+        };
+
+        const fetchData = () => {
+          axios.get('https://toggl.com/reports/api/v2/details', {
+            params: {
+              workspace_id: workspaceId,
+              user_agent: email,
+              since: start,
+              until: end,
+              page: info.page,
+            },
+            headers: {
+              Authorization: `Basic ${window.btoa(`${apiToken}:api_token`)}`,
+            },
+          })
+            .then(({ data: response }) => {
+              info.totalCount = response.total_count;
+              const { invoice, invoice: { items, project: { togglId } } } = this.state;
+              const entries = response.data.filter((e) => e.pid === Number(togglId));
+              entries.forEach((e) => {
+                const item = items.find((i) => e.uid === Number(i.uid));
+                item.hours += parseInt((e.dur / (1000 * 60 * 60)) / 24, 10);
+              });
+              this.setState({ invoice });
+              this.calculateCosts();
+              if (info.totalCount > (info.page * 50)) {
+                info.page += 1;
+                fetchData();
+              }
+            })
+            .catch((err) => console.log(err.response));
+        };
+        fetchData();
+      });
   }
 
   save = () => {
@@ -133,7 +178,6 @@ class Invoice extends Component {
   calculateCosts = () => {
     const { invoice } = this.state;
     let total = 0;
-    console.log(invoice);
     invoice.items.forEach((a) => {
       if (a.hours !== 'NA' && a.tasks.length) {
         let hours = 0;

@@ -18,6 +18,7 @@ class EditMember extends Component {
     this.username = React.createRef();
     this.name = React.createRef();
     this.email = React.createRef();
+    this.togglUid = React.createRef();
   }
 
   componentDidMount() {
@@ -45,12 +46,16 @@ class EditMember extends Component {
       username: { current: { value: username } },
       name: { current: { value: name } },
       email: { current: { value: email } },
+      togglUid: { current: { value: togglUid } },
     } = this;
     const data = {
       id,
       username,
       name,
       email,
+      toggl: {
+        uid: togglUid,
+      },
     };
     axios.put(API.update, data)
       .then(() => {
@@ -86,6 +91,12 @@ class EditMember extends Component {
                 ref={this.email}
                 type="email"
                 value={member.email}
+              />
+              <Input
+                label="Toggl UID"
+                type="number"
+                ref={this.togglUid}
+                value={member.toggl.uid}
               />
               <button onClick={update}>Update</button>
             </div>
