@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import html2canvas from 'html2canvas';
 import JsPdf from 'jspdf';
-import { API } from '../api';
+import { API } from '../../api';
 
 class Invoice extends Component {
   constructor(props) {
@@ -13,8 +13,7 @@ class Invoice extends Component {
     const { match: { params: { id } } } = props;
     this.state = {
       id,
-      invoiceNumber: Math.random().toString(32).slice(2, 7).toUpperCase(),
-      project: null,
+      invoice: null,
       editMode: {
         active: false,
         row: 0,
@@ -24,25 +23,17 @@ class Invoice extends Component {
 
   componentDidMount() {
     const { id } = this.state;
-    axios.post(API.viewProject, { id })
+    axios.post(API.viewInvoice, { id })
       .then(({ data }) => {
-        const { assignments } = data.project;
-        data.project.total = 0;
-        data.project.assignments = assignments.map((a) => {
-          a.title = `${a.role} (${a.name})`;
-          a.hours = a.type === 'Hourly' ? 0 : 'NA';
-          a.tasks = [];
-          return a;
-        });
-        this.setState({ project: data.project });
+        this.setState({ invoice: data.invoice });
         this.calculateCosts();
       })
       .catch((err) => console.log(err.response));
   }
 
   save = () => {
-    const { project, invoiceNumber } = this.state;
-    axios.post(API.createInvoice, { invoiceNumber, project })
+    const { invoice } = this.state;
+    axios.post(API.saveInvoice, { invoice })
       .then(({ data }) => {
         if (data.success) {
           window.alert('Invoice saved!');
@@ -53,23 +44,23 @@ class Invoice extends Component {
 
   saveCell = (event, row, col, cell) => {
     let { value } = event.target;
-    const { project, project: { assignments } } = this.state;
+    const { invoice, invoice: { items } } = this.state;
     const colName = col === 0 ? 'title' : 'hours';
-    const R = assignments[row];
+    const R = items[row];
     value = value === '' ? '0' : value;
 
     ReactDOM.unmountComponentAtNode(cell);
     if (R[colName] !== value) {
       if (colName === 'hours') {
         const newCost = R.price * value;
-        project.total += newCost - R.cost;
+        invoice.total += newCost - R.cost;
         R.cost = newCost;
       }
       R[colName] = value;
     } else {
       ReactDOM.render(R[colName], cell);
     }
-    this.setState({ project });
+    this.setState({ invoice });
   }
 
   editCell = (event, row, col) => {
@@ -106,43 +97,44 @@ class Invoice extends Component {
   }
 
   editSubTasks = (row) => {
-    const { editMode, project } = this.state;
+    const { editMode, invoice } = this.state;
     editMode.active = true;
     editMode.row = row;
     this.setState({ editMode });
-    if (project.assignments[editMode.row].tasks.length === 0) {
+    if (invoice.items[editMode.row].tasks.length === 0) {
       this.addRow();
     }
   };
 
   addRow = () => {
-    const { editMode, project } = this.state;
-    project.assignments[editMode.row].tasks.push({ title: '', hours: 0 });
-    this.setState({ project });
+    const { editMode, invoice } = this.state;
+    invoice.items[editMode.row].tasks.push({ title: '', hours: 0 });
+    this.setState({ invoice });
   }
 
   removeRow = (taskNo) => {
-    const { editMode, project } = this.state;
-    project.assignments[editMode.row].tasks.splice(taskNo, 1);
-    this.setState({ project });
+    const { editMode, invoice } = this.state;
+    invoice.items[editMode.row].tasks.splice(taskNo, 1);
+    this.setState({ invoice });
     this.calculateCosts();
   }
 
   updateSubTasks = (event, taskNo, col) => {
     const { value } = event.target;
-    const { editMode, project } = this.state;
-    const item = project.assignments[editMode.row];
+    const { editMode, invoice } = this.state;
+    const item = invoice.items[editMode.row];
     item.tasks[taskNo][col] = value;
     if (col === 'hours') {
       this.calculateCosts();
     }
-    this.setState({ project });
+    this.setState({ invoice });
   }
 
   calculateCosts = () => {
-    const { project } = this.state;
+    const { invoice } = this.state;
     let total = 0;
-    project.assignments.forEach((a) => {
+    console.log(invoice);
+    invoice.items.forEach((a) => {
       if (a.hours !== 'NA' && a.tasks.length) {
         let hours = 0;
         a.tasks.forEach((t) => { hours += Number(t.hours); });
@@ -151,8 +143,8 @@ class Invoice extends Component {
       a.cost = a.hours === 'NA' ? a.price : a.hours * a.price;
       total += Number(a.cost);
     });
-    project.total = total;
-    this.setState({ project });
+    invoice.total = total;
+    this.setState({ invoice });
   }
 
   render() {
@@ -165,8 +157,8 @@ class Invoice extends Component {
       removeRow,
       updateSubTasks,
     } = this;
-    const { project: p, invoiceNumber, editMode } = this.state;
-    if (!p) return null;
+    const { invoice: i, editMode } = this.state;
+    if (!i) return null;
     return (
       <div className="invoice" id="invoice">
         {editMode.active && (
@@ -181,7 +173,7 @@ class Invoice extends Component {
                 </tr>
               </thead>
               <tbody>
-                {p.assignments[editMode.row].tasks.map((t, i) => (
+                {i.items[editMode.row].tasks.map((t, i) => (
                   <tr key={Math.random().toString(32).slice(2, 7)}>
                     <td><input onBlur={(e) => updateSubTasks(e, i, 'title')} type="text" defaultValue={t.title} /></td>
                     <td><input onBlur={(e) => updateSubTasks(e, i, 'hours')} type="number" defaultValue={t.hours} /></td>
@@ -201,28 +193,28 @@ class Invoice extends Component {
         <div className="row flex">
           <div className="title">
             Invoice:
-            { invoiceNumber }
+            { i.invoiceNumber }
           </div>
         </div>
         <div className="row flex">
           <div className="title">Attention : </div>
           <div className="content">
-            { p.client }
+            { i.project.client }
             <br />
-            { p.name }
+            { i.project.name }
           </div>
         </div>
         <div className="row flex">
           <div className="title">Date : </div>
-          <div className="content">{ new Date().toDateString() }</div>
+          <div className="content">{ `${i.start} - ${i.end}` }</div>
         </div>
         <div className="row flex">
           <div className="title">Project Title : </div>
-          <div className="content">{ p.role }</div>
+          <div className="content">{ i.project.role }</div>
         </div>
         <div className="row flex">
           <div className="title">Description : </div>
-          <div className="content">{ p.description }</div>
+          <div className="content">{ i.description }</div>
         </div>
         <table role="grid" className="employee-data">
           <thead>
@@ -234,26 +226,31 @@ class Invoice extends Component {
             </tr>
           </thead>
           <tbody>
-            { p.assignments.map((a, i) => (
-              <tr key={a.id}>
+            { i.items.map((item, i) => (
+              <tr key={i}>
                 <td role="gridcell" onClick={(e) => { editCell(e, i, 0); }}>
-                  <span>{a.title}</span>
-                  {a.type === 'Hourly' && <button style={{ float: 'right' }} onClick={() => editSubTasks(i)}>Edit Sub-tasks</button>}
-                  {!!a.tasks.length && <ul>{a.tasks.map((t, i) => <li key={i}>{t.title}</li>)}</ul>}
+                  <span>{item.name}</span>
+                  {item.type === 'Hourly' && (
+                  <button style={{ float: 'right' }} onClick={() => editSubTasks(i)}>
+                    Edit Sub-tasks
+                  </button>
+                  )}
+                  {!!item.tasks.length
+                  && <ul>{item.tasks.map((t, i) => <li key={i}>{t.title}</li>)}</ul>}
                 </td>
                 <td role="gridcell" onClick={(e) => { editCell(e, i, 1); }}>
-                  <span>{a.hours}</span>
-                  {a.tasks && <ul>{a.tasks.map((t, i) => <li key={i}>{t.hours}</li>)}</ul>}
+                  <span>{item.hours}</span>
+                  {item.tasks && <ul>{item.tasks.map((t, i) => <li key={i}>{t.hours}</li>)}</ul>}
                 </td>
-                <td>{a.price}</td>
-                <td>{a.cost}</td>
+                <td>{item.price}</td>
+                <td>{item.cost}</td>
               </tr>
             ))}
           </tbody>
         </table>
         <div className="total">
           Total: $
-          {p.total}
+          {i.total}
         </div>
         <button onClick={() => { save(); }}>Save Invoice</button>
         <button id="printBtn" onClick={() => { generatePdf(); }}>Generate PDF</button>
