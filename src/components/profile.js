@@ -14,6 +14,8 @@ class Profile extends Component {
     this.username = React.createRef();
     this.oldPassword = React.createRef();
     this.newPassword = React.createRef();
+    this.workspaceId = React.createRef();
+    this.apiToken = React.createRef();
   }
 
   updateProfile = (e) => {
@@ -25,6 +27,8 @@ class Profile extends Component {
       username,
       oldPassword,
       newPassword,
+      workspaceId,
+      apiToken,
     } = this;
 
     const details = {
@@ -33,6 +37,10 @@ class Profile extends Component {
       username: username.current.value,
       oldPassword: oldPassword.current.value,
       newPassword: newPassword.current.value,
+      toggl: {
+        workspaceId: workspaceId.current.value,
+        apiToken: apiToken.current.value,
+      },
     };
 
     axios.post(API.verifyPassword, { password: details.oldPassword })
@@ -65,6 +73,14 @@ class Profile extends Component {
           <Input
             label="Username"
             ref={this.username}
+          />
+          <Input
+            label="Toggl Workspace ID"
+            ref={this.workspaceId}
+          />
+          <Input
+            label="Toggl API Token"
+            ref={this.apiToken}
           />
           <Input
             label="Current Password"
