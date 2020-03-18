@@ -154,7 +154,7 @@ class Invoice extends Component {
   addRow = () => {
     const { editMode, invoice } = this.state;
     invoice.items[editMode.row].tasks.push({ title: '', hours: 0 });
-    this.setState({ invoice });
+    this.setState(() => invoice);
   }
 
   removeRow = (taskNo) => {
