@@ -91,10 +91,9 @@ class Invoice extends Component {
   saveCell = (event, row, col, cell) => {
     let { value } = event.target;
     const { invoice, invoice: { items } } = this.state;
-    const colName = col === 0 ? 'title' : 'hours';
+    const colName = col === 0 ? 'name' : 'hours';
     const R = items[row];
     value = value === '' ? '0' : value;
-
     ReactDOM.unmountComponentAtNode(cell);
     if (R[colName] !== value) {
       if (colName === 'hours') {
