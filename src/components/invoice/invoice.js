@@ -26,6 +26,7 @@ class Invoice extends Component {
     axios.post(API.viewInvoice, { id })
       .then(({ data }) => {
         this.setState({ invoice: data.invoice });
+        this.calculateCosts();
         this.fetchTogglHours();
       })
       .catch((err) => console.log(err.response));
@@ -105,7 +106,7 @@ class Invoice extends Component {
     } else {
       ReactDOM.render(R[colName], cell);
     }
-    this.setState({ invoice });
+    this.setState(() => invoice);
   }
 
   editCell = (event, row, col) => {
