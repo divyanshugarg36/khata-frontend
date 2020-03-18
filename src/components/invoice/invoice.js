@@ -270,32 +270,26 @@ class Invoice extends Component {
             </tr>
           </thead>
           <tbody>
-            { i.items.map((item, i) => {
-              if (item !== null) {
-                return (
-                  <tr key={i}>
-                    <td role="gridcell" onClick={(e) => { editCell(e, i, 0); }}>
-                      <span>{item.name}</span>
-                      {item.type === 'Hourly' && (
-                      <button style={{ float: 'right' }} onClick={() => editSubTasks(i)}>
-                        Edit Sub-tasks
-                      </button>
-                      )}
-                      {!!item.tasks.length
-                      && <ul>{item.tasks.map((t, i) => <li key={i}>{t.title}</li>)}</ul>}
-                    </td>
-                    <td role="gridcell" onClick={(e) => { editCell(e, i, 1); }}>
-                      <span>{item.hours}</span>
-                      {item.tasks
-                      && <ul>{item.tasks.map((t, i) => <li key={i}>{t.hours}</li>)}</ul>}
-                    </td>
-                    <td>{item.price}</td>
-                    <td>{item.cost}</td>
-                  </tr>
-                );
-              }
-              return null;
-            })}
+            { i.items.map((item, i) => item !== null && (
+              <tr key={i}>
+                <td role="gridcell" onClick={(e) => { editCell(e, i, 0); }}>
+                  <span>{item.name}</span>
+                  {item.type === 'Hourly' && (
+                  <button style={{ float: 'right' }} onClick={() => editSubTasks(i)}>
+                    Edit Sub-tasks
+                  </button>
+                  )}
+                  {item.tasks
+                  && <ul>{item.tasks.map((t, i) => <li key={i}>{t.title}</li>)}</ul>}
+                </td>
+                <td role="gridcell" onClick={(e) => { editCell(e, i, 1); }}>
+                  <span>{item.hours}</span>
+                  {item.tasks && <ul>{item.tasks.map((t, i) => <li key={i}>{t.hours}</li>)}</ul>}
+                </td>
+                <td>{item.price}</td>
+                <td>{item.cost}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
         <div className="total">
