@@ -10,6 +10,7 @@ export const API = {
   deleteMember: `${HOST}user/remove`,
   register: `${HOST}register`,
   update: `${HOST}user/update`,
+  updatePassword: `${HOST}user/update/password`,
   fetchUsers: `${HOST}user/all`,
   fetchUser: `${HOST}user/fetch`,
 

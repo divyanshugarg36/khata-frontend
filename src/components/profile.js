@@ -7,56 +7,76 @@ import { API } from '../api';
 class Profile extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      user: null,
+    };
 
     this.name = React.createRef();
     this.email = React.createRef();
     this.username = React.createRef();
-    this.oldPassword = React.createRef();
-    this.newPassword = React.createRef();
     this.workspaceId = React.createRef();
     this.apiToken = React.createRef();
+
+    this.newPassword = React.createRef();
+    this.oldPassword = React.createRef();
+  }
+
+  componentDidMount() {
+    axios.post(API.fetchUser)
+      .then(({ data }) => {
+        this.setState({ user: data.user });
+      });
   }
 
   updateProfile = (e) => {
     e.preventDefault();
 
     const {
+      name: { current: { value: name } },
+      email: { current: { value: email } },
+      username: { current: { value: username } },
+      workspaceId: { current: { value: workspaceId } },
+      apiToken: { current: { value: apiToken } },
+    } = this;
+    const details = {
       name,
       email,
       username,
-      oldPassword,
-      newPassword,
-      workspaceId,
-      apiToken,
-    } = this;
-
-    const details = {
-      name: name.current.value,
-      email: email.current.value,
-      username: username.current.value,
-      oldPassword: oldPassword.current.value,
-      newPassword: newPassword.current.value,
-      toggl: {
-        workspaceId: workspaceId.current.value,
-        apiToken: apiToken.current.value,
-      },
+      toggl: { workspaceId, apiToken },
     };
+    axios.put(API.update, details)
+      .then(() => {
+        window.alert('Profile updated!');
+      }).catch(() => {
+        window.alert('Profile not updated!');
+      });
+  }
+
+  updatePassword = (e) => {
+    const {
+      oldPassword: { current: { value: oldPassword } },
+      newPassword: { current: { value: newPassword } },
+    } = this;
+    const details = { oldPassword, password: newPassword };
+    e.preventDefault();
 
     axios.post(API.verifyPassword, { password: details.oldPassword })
       .then(() => {
-        axios.put(API.update, details)
+        axios.post(API.updatePassword, details)
           .then(() => {
-            window.alert('Profile updated!');
+            window.alert('Password updated!');
           }).catch(() => {
-            window.alert('Profile not updated!');
+            window.alert('Password not updated!');
           });
-      }).catch(() => {
+      })
+      .catch(() => {
         window.alert('Old password is incorrect!');
       });
   }
 
   render() {
+    const { user } = this.state;
+    if (!user) return null;
     return (
       <div>
         <h3>Edit Profile</h3>
@@ -64,24 +84,33 @@ class Profile extends Component {
           <Input
             label="Name"
             ref={this.name}
+            value={user.name || ''}
           />
           <Input
             label="Email"
             ref={this.email}
             type="email"
+            value={user.email || ''}
           />
           <Input
             label="Username"
             ref={this.username}
+            value={user.username || ''}
           />
           <Input
             label="Toggl Workspace ID"
             ref={this.workspaceId}
+            value={user.toggl.workspaceId || ''}
           />
           <Input
             label="Toggl API Token"
             ref={this.apiToken}
+            value={user.toggl.apiToken || ''}
           />
+          <button type="submit">Save</button>
+        </form>
+        <h3>Update password</h3>
+        <form onSubmit={this.updatePassword}>
           <Input
             label="Current Password"
             ref={this.oldPassword}
