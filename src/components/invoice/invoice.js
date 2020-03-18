@@ -284,7 +284,8 @@ class Invoice extends Component {
                 </td>
                 <td role="gridcell" onClick={(e) => { editCell(e, i, 1); }}>
                   <span>{item.hours}</span>
-                  {item.tasks && <ul>{item.tasks.map((t, i) => <li key={i}>{t.hours}</li>)}</ul>}
+                  {item && item.tasks
+                  && <ul>{item.tasks.map((t, i) => <li key={i}>{t.hours}</li>)}</ul>}
                 </td>
                 <td>{item.price}</td>
                 <td>{item.cost}</td>
