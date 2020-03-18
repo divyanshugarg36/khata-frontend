@@ -270,7 +270,7 @@ class Invoice extends Component {
             </tr>
           </thead>
           <tbody>
-            { i.items.map((item, i) => (
+            { i.items.map((item, i) => item !== null && (
               <tr key={i}>
                 <td role="gridcell" onClick={(e) => { editCell(e, i, 0); }}>
                   <span>{item.name}</span>
@@ -284,8 +284,7 @@ class Invoice extends Component {
                 </td>
                 <td role="gridcell" onClick={(e) => { editCell(e, i, 1); }}>
                   <span>{item.hours}</span>
-                  {item !== null
-                    ? <ul>{item.tasks.map((t, i) => <li key={i}>{t.hours}</li>)}</ul> : ''}
+                  {item.tasks && <ul>{item.tasks.map((t, i) => <li key={i}>{t.hours}</li>)}</ul>}
                 </td>
                 <td>{item.price}</td>
                 <td>{item.cost}</td>
