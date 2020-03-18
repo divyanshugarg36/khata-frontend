@@ -125,9 +125,8 @@ class EditProject extends Component {
                     className="textarea"
                     id="description"
                     ref={this.description}
-                  >
-                    {project.description}
-                  </textarea>
+                    defaultValue={project.description}
+                  />
                 </label>
               </div>
               <Input
