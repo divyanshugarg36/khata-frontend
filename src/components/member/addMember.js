@@ -2,35 +2,11 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import Input from '../common/Input';
+import MemberForm from './memberForm';
 import { API } from '../../api';
 
 class AddMember extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-
-    this.username = React.createRef();
-    this.name = React.createRef();
-    this.email = React.createRef();
-    this.togglUid = React.createRef();
-  }
-
-  addMember = () => {
-    const {
-      username: { current: { value: username } },
-      name: { current: { value: name } },
-      email: { current: { value: email } },
-      togglUid: { current: { value: togglUid } },
-    } = this;
-    const data = {
-      username,
-      name,
-      email,
-      toggl: {
-        uid: togglUid,
-      },
-    };
+  addMember = (data) => {
     axios.post(API.addMember, data)
       .then(({ data }) => {
         window.alert('Member added!');
@@ -46,25 +22,10 @@ class AddMember extends Component {
       <>
         <div className="form-container">
           <h3>Add new member - </h3>
-          <Input
-            label="Username"
-            ref={this.username}
+          <MemberForm
+            submitLabel="Add Member"
+            onSubmit={addMember}
           />
-          <Input
-            label="Name"
-            ref={this.name}
-          />
-          <Input
-            label="Email"
-            ref={this.email}
-            type="email"
-          />
-          <Input
-            label="Toggl UID"
-            type="number"
-            ref={this.togglUid}
-          />
-          <button onClick={addMember}>Add member</button>
         </div>
       </>
     );
