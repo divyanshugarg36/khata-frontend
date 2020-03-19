@@ -18,11 +18,10 @@ class EditMember extends Component {
   }
 
   componentDidMount() {
-    getEntity(
-      API.user.get,
-      { id: this.id },
-      ({ user: member }) => this.setState({ member }),
-    );
+    const { id } = this;
+    getEntity(API.user.get, { id }, (data) => {
+      this.setState({ member: data.user });
+    });
   }
 
   removeMember = () => {
