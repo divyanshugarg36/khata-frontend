@@ -5,27 +5,25 @@ import axios from 'axios';
 import ProjectForm from './projectForm';
 import AddMemberForm from './addMemberForm';
 import { API } from '../../api';
-import { request } from '../../utils';
+import { getEntity } from '../../utils';
 
 class EditProject extends Component {
   constructor(props) {
     super(props);
     const { match: { params: { id } } } = props;
+    this.id = id;
     this.state = {
-      id,
       project: null,
     };
   }
 
   componentDidMount() {
-    const { id } = this.state;
-    request(API.project.get, { id }, ({ project }) => this.setState({ project }));
+    getEntity(API.project.get, { id: this.id }, ({ project }) => this.setState({ project }));
   }
 
   update = (data) => {
-    const { id } = this.state;
-    data.id = id;
-    axios.put(API.project.update, { data, id })
+    data.id = this.id;
+    axios.put(API.project.update, { data, id: this.id })
       .then(() => {
         window.alert('Project updated!');
       })
@@ -35,8 +33,7 @@ class EditProject extends Component {
   }
 
   addMember = (data) => {
-    const { id } = this.state;
-    data.project = id;
+    data.project = this.id;
     axios.post(API.project.assign, data)
       .then(({ data }) => {
         this.setState({ project: data.project });
@@ -46,8 +43,7 @@ class EditProject extends Component {
   }
 
   removeMember = (userId) => {
-    const { id: project } = this.state;
-    axios.post(API.project.unassign, { userId, project })
+    axios.post(API.project.unassign, { userId, project: this.id })
       .then(() => {
         const { project } = this.state;
         const { assignments } = project;

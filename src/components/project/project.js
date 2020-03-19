@@ -2,35 +2,30 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { API } from '../../api';
-import { request } from '../../utils';
+import { getEntity, deleteEntity } from '../../utils';
 
 class Project extends Component {
   constructor(props) {
     super(props);
-    const { match: { params: { id } } } = props;
+    const { params: { id } } = props.match;
+    this.id = id;
+    this.history = props.history;
     this.state = {
-      id,
       project: null,
-      history: props.history,
     };
   }
 
   componentDidMount() {
-    const { id } = this.state;
-    request(API.project.get, { id }, ({ project }) => this.setState({ project }));
+    getEntity(API.project.get, { id: this.id }, ({ project }) => this.setState({ project }));
   }
 
   removeProject = () => {
-    const { id, history: { push } } = this.state;
-    request(API.project.remove, { id }, () => {
-      push('/project/all');
-      window.alert('Project removed!');
-    });
+    deleteEntity(API.project.remove, { id: this.id }, this.history, 'Project');
   }
 
   render() {
-    const { id, project, history: { push } } = this.state;
-    const { removeProject } = this;
+    const { project } = this.state;
+    const { id, removeProject, history: { push } } = this;
     return (
       <>
         {project

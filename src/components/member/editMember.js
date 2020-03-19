@@ -4,30 +4,25 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import MemberForm from './memberForm';
 import { API } from '../../api';
-import { request } from '../../utils';
+import { getEntity, deleteEntity } from '../../utils';
 
 class EditMember extends Component {
   constructor(props) {
     super(props);
-    const { match: { params: { id } } } = props;
+    const { match, history } = props;
+    this.history = history;
+    this.id = match.params.id;
     this.state = {
-      id,
       member: null,
-      history: props.history,
     };
   }
 
   componentDidMount() {
-    const { id } = this.state;
-    request(API.user.get, { id }, ({ user: member }) => this.setState({ member }));
+    getEntity(API.user.get, { id: this.id }, ({ user: member }) => this.setState({ member }));
   }
 
   removeMember = () => {
-    const { id, history: { push } } = this.state;
-    request(API.user.delete, { id }, () => {
-      push('/member/all');
-      window.alert('Member removed!');
-    });
+    deleteEntity(API.user.delete, { id: this.id }, this.history, 'Member');
   }
 
   update = (data) => {
