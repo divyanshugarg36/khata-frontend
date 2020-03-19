@@ -3,8 +3,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import ProjectForm from './projectForm';
-import Input from '../common/Input';
-import Select from '../common/Select';
+import AddMemberForm from './addMemberForm';
 import { API } from '../../api';
 import { request } from '../../utils';
 
@@ -16,11 +15,6 @@ class EditProject extends Component {
       id,
       project: null,
     };
-
-    this.user = React.createRef();
-    this.role = React.createRef();
-    this.price = React.createRef();
-    this.type = React.createRef();
   }
 
   componentDidMount() {
@@ -40,21 +34,9 @@ class EditProject extends Component {
       });
   }
 
-  addMember = () => {
-    const {
-      user: { current: { value: user } },
-      role: { current: { value: role } },
-      price: { current: { value: price } },
-      type: { current: { value: type } },
-    } = this;
+  addMember = (data) => {
     const { id } = this.state;
-    const data = {
-      username: user,
-      project: id,
-      role,
-      price,
-      type,
-    };
+    data.project = id;
     axios.post(API.project.assign, data)
       .then(({ data }) => {
         this.setState({ project: data.project });
@@ -83,7 +65,6 @@ class EditProject extends Component {
   render() {
     const { update, removeMember, addMember } = this;
     const { project } = this.state;
-    const types = ['Hourly', 'Monthly', 'Other'];
     return (
       <>
         {project
@@ -108,29 +89,8 @@ class EditProject extends Component {
                   ),
                 )}
               </ul>
-              <div className="form-container">
-                <h3>Add member to project - </h3>
-                <Input
-                  label="Username"
-                  ref={this.user}
-                />
-                <Input
-                  label="Role"
-                  ref={this.role}
-                />
-                <Input
-                  label="Price"
-                  ref={this.price}
-                  type="number"
-                />
-                <Select
-                  label="Type"
-                  ref={this.type}
-                  options={types}
-                />
-                <button onClick={addMember}>Add member</button>
-              </div>
-
+              <h3>Add member to project - </h3>
+              <AddMemberForm onSubmit={addMember} />
             </div>
           )}
       </>
