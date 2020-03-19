@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import ProjectForm from './projectForm';
 import Input from '../common/Input';
 import Select from '../common/Select';
 import { API } from '../../api';
@@ -14,12 +15,6 @@ class EditProject extends Component {
       id,
       project: null,
     };
-
-    this.name = React.createRef();
-    this.description = React.createRef();
-    this.client = React.createRef();
-    this.projectRole = React.createRef();
-    this.togglId = React.createRef();
 
     this.user = React.createRef();
     this.role = React.createRef();
@@ -36,23 +31,9 @@ class EditProject extends Component {
       .catch((err) => console.log(err.response));
   }
 
-  update = () => {
+  update = (data) => {
     const { id } = this.state;
-    const {
-      name: { current: { value: name } },
-      description: { current: { value: description } },
-      client: { current: { value: client } },
-      projectRole: { current: { value: projectRole } },
-      togglId: { current: { value: togglId } },
-    } = this;
-    const data = {
-      id,
-      name,
-      description,
-      client,
-      role: projectRole,
-      togglId,
-    };
+    data.id = id;
     axios.put(API.updateProject, { data, id })
       .then(() => {
         window.alert('Project updated!');
@@ -112,40 +93,11 @@ class EditProject extends Component {
           && (
             <div>
               <h3>Edit Project details - </h3>
-              <Input
-                label="Name"
-                ref={this.name}
-                value={project.name}
+              <ProjectForm
+                data={project}
+                onSubmit={update}
+                submitLabel="Update"
               />
-              <div className="textarea-container">
-                <label htmlFor="description">
-                  Description
-                  <br />
-                  <textarea
-                    className="textarea"
-                    id="description"
-                    ref={this.description}
-                    defaultValue={project.description}
-                  />
-                </label>
-              </div>
-              <Input
-                label="Client"
-                ref={this.client}
-                value={project.client}
-              />
-              <Input
-                label="Role"
-                ref={this.projectRole}
-                value={project.role}
-              />
-              <Input
-                label="Toggl ID"
-                ref={this.togglId}
-                value={project.togglId}
-                type="number"
-              />
-              <button onClick={update}>Update</button>
               <br />
               <br />
               <strong>Members - </strong>
@@ -175,7 +127,7 @@ class EditProject extends Component {
                   type="number"
                 />
                 <Select
-                  label="Username"
+                  label="Type"
                   ref={this.type}
                   options={types}
                 />
