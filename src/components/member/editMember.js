@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import MemberForm from './memberForm';
 import { API } from '../../api';
+import { request } from '../../utils';
 
 class EditMember extends Component {
   constructor(props) {
@@ -18,21 +19,15 @@ class EditMember extends Component {
 
   componentDidMount() {
     const { id } = this.state;
-    axios.post(API.fetchUser, { id })
-      .then(({ data }) => {
-        this.setState({ member: data.user });
-      })
-      .catch((err) => console.log(err.response));
+    request(API.fetchUser, { id }, ({ user: member }) => this.setState({ member }));
   }
 
   removeMember = () => {
     const { id, history: { push } } = this.state;
-    axios.post(API.deleteMember, { id })
-      .then(() => {
-        push('/member/all');
-        window.alert('Member removed!');
-      })
-      .catch((err) => console.log(err));
+    request(API.deleteMember, { id }, () => {
+      push('/member/all');
+      window.alert('Member removed!');
+    });
   }
 
   update = (data) => {

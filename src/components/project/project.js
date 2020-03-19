@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import { API } from '../../api';
+import { request } from '../../utils';
 
 class Project extends Component {
   constructor(props) {
@@ -17,21 +17,15 @@ class Project extends Component {
 
   componentDidMount() {
     const { id } = this.state;
-    axios.post(API.viewProject, { id })
-      .then(({ data }) => {
-        this.setState({ project: data.project });
-      })
-      .catch((err) => console.log(err.response));
+    request(API.viewProject, { id }, ({ project }) => this.setState({ project }));
   }
 
   removeProject = () => {
     const { id, history: { push } } = this.state;
-    axios.post(API.removeProject, { id })
-      .then(() => {
-        push('/project/all');
-        window.alert('Project removed!');
-      })
-      .catch((err) => console.log(err));
+    request(API.removeProject, { id }, () => {
+      push('/project/all');
+      window.alert('Project removed!');
+    });
   }
 
   render() {

@@ -6,6 +6,7 @@ import ProjectForm from './projectForm';
 import Input from '../common/Input';
 import Select from '../common/Select';
 import { API } from '../../api';
+import { request } from '../../utils';
 
 class EditProject extends Component {
   constructor(props) {
@@ -24,11 +25,7 @@ class EditProject extends Component {
 
   componentDidMount() {
     const { id } = this.state;
-    axios.post(API.viewProject, { id })
-      .then(({ data }) => {
-        this.setState({ project: data.project });
-      })
-      .catch((err) => console.log(err.response));
+    request(API.viewProject, { id }, ({ project }) => this.setState({ project }));
   }
 
   update = (data) => {
