@@ -32,17 +32,20 @@ class Profile extends Component {
     e.preventDefault();
 
     const {
-      name: { current: { value: name } },
-      email: { current: { value: email } },
-      username: { current: { value: username } },
-      workspaceId: { current: { value: workspaceId } },
-      apiToken: { current: { value: apiToken } },
-    } = this;
-    const details = {
       name,
       email,
       username,
-      toggl: { workspaceId, apiToken },
+      workspaceId,
+      apiToken,
+    } = this;
+    const details = {
+      name: name.current.value,
+      email: email.current.value,
+      username: username.current.value,
+      toggl: {
+        workspaceId: workspaceId.current.value,
+        apiToken: apiToken.current.value,
+      },
     };
     axios.put(API.update, details)
       .then(() => {
