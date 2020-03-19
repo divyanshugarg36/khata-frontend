@@ -9,7 +9,6 @@ import Login from './login';
 import Register from './register';
 import Dashboard from './dashboard';
 import Profile from './profile';
-import AddMember from './member/addMember';
 import MemberList from './member/memberList';
 import EditMember from './member/editMember';
 import AddProject from './project/addProject';
@@ -37,7 +36,6 @@ class Khata extends Component {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/dashboard" component={Dashboard} />
-          <Route path="/member/add" component={AddMember} />
           <Route path="/member/all" component={MemberList} />
           <Route path="/member/:id" component={EditMember} />
           <Route path="/profile" component={Profile} />
