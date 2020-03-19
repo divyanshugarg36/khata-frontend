@@ -15,7 +15,7 @@ class InvoiceList extends Component {
   }
 
   componentDidMount() {
-    axios.post(API.getInvoices)
+    axios.post(API.invoice.all)
       .then(({ data }) => this.setState({ invoices: data.invoices }))
       .catch((err) => console.log(err));
   }

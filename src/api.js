@@ -1,34 +1,44 @@
 const { REACT_APP_API_URL: HOST } = process.env;
 
 export const API = {
-  // Authentication
+  history: {
+    get: `${HOST}history/get`,
+  },
+
+  invoice: {
+    all: `${HOST}invoice/all`,
+    create: `${HOST}invoice/create`,
+    get: `${HOST}invoice/view`,
+    save: `${HOST}invoice/save`,
+  },
+
   login: `${HOST}login`,
-  verifyPassword: `${HOST}verifypassword`,
 
-  // User
-  addMember: `${HOST}user/add`,
-  deleteMember: `${HOST}user/remove`,
-  register: `${HOST}register`,
-  update: `${HOST}user/update`,
-  updatePassword: `${HOST}user/update/password`,
-  fetchUsers: `${HOST}user/all`,
-  fetchUser: `${HOST}user/fetch`,
+  project: {
+    add: `${HOST}project/add`,
+    all: `${HOST}project/all`,
+    assign: `${HOST}project/member/add`,
+    get: `${HOST}project/view`,
+    remove: `${HOST}project/remove`,
+    unassign: `${HOST}project/member/remove`,
+    update: `${HOST}project/update`,
+  },
 
-  // Project
-  addProject: `${HOST}project/add`,
-  viewProject: `${HOST}project/view`,
-  updateProject: `${HOST}project/update`,
-  removeProject: `${HOST}project/remove`,
-  fetchProjects: `${HOST}project/all`,
-  assignMember: `${HOST}project/member/add`,
-  removeMember: `${HOST}project/member/remove`,
+  toggl: {
+    details: 'https://toggl.com/reports/api/v2/details',
+  },
 
-  // History
-  history: `${HOST}history/get`,
+  user: {
+    add: `${HOST}user/add`,
+    all: `${HOST}user/all`,
+    delete: `${HOST}user/remove`,
+    get: `${HOST}user/fetch`,
+    register: `${HOST}register`,
+    update: {
+      password: `${HOST}user/update/password`,
+      profile: `${HOST}user/update`,
+    },
+  },
 
-  // Invoice
-  createInvoice: `${HOST}invoice/create`,
-  saveInvoice: `${HOST}invoice/save`,
-  getInvoices: `${HOST}invoice/all`,
-  viewInvoice: `${HOST}invoice/view`,
+  verify: `${HOST}verifypassword`,
 };

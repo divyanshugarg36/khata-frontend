@@ -7,7 +7,7 @@ import { API } from '../../api';
 
 class AddMember extends Component {
   addMember = (data) => {
-    axios.post(API.addMember, data)
+    axios.post(API.user.add, data)
       .then(({ data }) => {
         window.alert('Member added!');
         const { onAdd } = this.props;

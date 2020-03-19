@@ -18,7 +18,7 @@ class CreateInvoice extends Component {
   }
 
   componentDidMount() {
-    axios.post(API.fetchProjects)
+    axios.post(API.project.all)
       .then(({ data }) => {
         this.setState({ projects: data.projects });
       })
@@ -35,7 +35,7 @@ class CreateInvoice extends Component {
     const data = {
       project, start, end,
     };
-    axios.post(API.createInvoice, data)
+    axios.post(API.invoice.create, data)
       .then(({ data }) => {
         const { history: { push } } = this.props;
         push(`/invoice/${data.invoice.id}`);

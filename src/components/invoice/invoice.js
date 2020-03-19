@@ -23,7 +23,7 @@ class Invoice extends Component {
 
   componentDidMount() {
     const { id } = this.state;
-    axios.post(API.viewInvoice, { id })
+    axios.post(API.invoice.get, { id })
       .then(({ data }) => {
         this.setState({ invoice: data.invoice });
         this.calculateCosts();
@@ -33,7 +33,7 @@ class Invoice extends Component {
   }
 
   fetchTogglHours = () => {
-    axios.post(API.fetchUser)
+    axios.post(API.user.get)
       .then(({ data }) => {
         const { toggl, email } = data.user;
         const { workspaceId, apiToken } = toggl;
@@ -44,7 +44,7 @@ class Invoice extends Component {
         };
 
         const fetchData = () => {
-          axios.get('https://toggl.com/reports/api/v2/details', {
+          axios.get(API.toggl.details, {
             params: {
               workspace_id: workspaceId,
               user_agent: email,
@@ -79,7 +79,7 @@ class Invoice extends Component {
 
   save = () => {
     const { invoice } = this.state;
-    axios.post(API.saveInvoice, { invoice })
+    axios.post(API.invoice.save, { invoice })
       .then(({ data }) => {
         if (data.success) {
           window.alert('Invoice saved!');

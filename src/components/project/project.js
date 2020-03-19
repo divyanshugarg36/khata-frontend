@@ -17,12 +17,12 @@ class Project extends Component {
 
   componentDidMount() {
     const { id } = this.state;
-    request(API.viewProject, { id }, ({ project }) => this.setState({ project }));
+    request(API.project.get, { id }, ({ project }) => this.setState({ project }));
   }
 
   removeProject = () => {
     const { id, history: { push } } = this.state;
-    request(API.removeProject, { id }, () => {
+    request(API.project.remove, { id }, () => {
       push('/project/all');
       window.alert('Project removed!');
     });

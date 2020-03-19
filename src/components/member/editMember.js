@@ -19,12 +19,12 @@ class EditMember extends Component {
 
   componentDidMount() {
     const { id } = this.state;
-    request(API.fetchUser, { id }, ({ user: member }) => this.setState({ member }));
+    request(API.user.get, { id }, ({ user: member }) => this.setState({ member }));
   }
 
   removeMember = () => {
     const { id, history: { push } } = this.state;
-    request(API.deleteMember, { id }, () => {
+    request(API.user.delete, { id }, () => {
       push('/member/all');
       window.alert('Member removed!');
     });
@@ -33,7 +33,7 @@ class EditMember extends Component {
   update = (data) => {
     const { id } = this.state;
     data.id = id;
-    axios.put(API.update, data)
+    axios.put(API.user.update.profile, data)
       .then(() => {
         window.alert('Member details updated!');
       })

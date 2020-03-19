@@ -15,7 +15,7 @@ class History extends Component {
   }
 
   componentDidMount() {
-    axios.post(API.history)
+    axios.post(API.history.get)
       .then(({ data }) => {
         this.setState({ history: data.history, filtered: data.history });
       })

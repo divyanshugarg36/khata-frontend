@@ -7,7 +7,7 @@ import { API } from '../../api';
 
 class AddProject extends Component {
   addProject = (data) => {
-    axios.post(API.addProject, data)
+    axios.post(API.project.add, data)
       .then(({ data }) => {
         window.alert('Project added!');
         const { onAdd } = this.props;

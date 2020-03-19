@@ -33,7 +33,7 @@ class Register extends Component {
     const data = {
       username, password, email,
     };
-    axios.post(API.register, data)
+    axios.post(API.user.register, data)
       .then(({ data }) => {
         window.alert('Registered successfully!');
         const { success, token } = data;

@@ -22,7 +22,7 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    axios.post(API.fetchUser)
+    axios.post(API.user.get)
       .then(({ data }) => {
         this.setState({ user: data.user });
       });
@@ -47,7 +47,7 @@ class Profile extends Component {
         apiToken: apiToken.current.value,
       },
     };
-    axios.put(API.update, details)
+    axios.put(API.user.update.profile, details)
       .then(() => {
         window.alert('Profile updated!');
       }).catch(() => {
@@ -63,9 +63,9 @@ class Profile extends Component {
     const details = { oldPassword, password: newPassword };
     e.preventDefault();
 
-    axios.post(API.verifyPassword, { password: details.oldPassword })
+    axios.post(API.verify, { password: details.oldPassword })
       .then(() => {
-        axios.post(API.updatePassword, details)
+        axios.post(API.user.update.password, details)
           .then(() => {
             window.alert('Password updated!');
           }).catch(() => {

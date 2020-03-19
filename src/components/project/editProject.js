@@ -25,13 +25,13 @@ class EditProject extends Component {
 
   componentDidMount() {
     const { id } = this.state;
-    request(API.viewProject, { id }, ({ project }) => this.setState({ project }));
+    request(API.project.get, { id }, ({ project }) => this.setState({ project }));
   }
 
   update = (data) => {
     const { id } = this.state;
     data.id = id;
-    axios.put(API.updateProject, { data, id })
+    axios.put(API.project.update, { data, id })
       .then(() => {
         window.alert('Project updated!');
       })
@@ -55,7 +55,7 @@ class EditProject extends Component {
       price,
       type,
     };
-    axios.post(API.assignMember, data)
+    axios.post(API.project.assign, data)
       .then(({ data }) => {
         this.setState({ project: data.project });
         window.alert('User added!');
@@ -65,7 +65,7 @@ class EditProject extends Component {
 
   removeMember = (userId) => {
     const { id: project } = this.state;
-    axios.post(API.removeMember, { userId, project })
+    axios.post(API.project.unassign, { userId, project })
       .then(() => {
         const { project } = this.state;
         const { assignments } = project;

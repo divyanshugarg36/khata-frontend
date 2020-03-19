@@ -15,7 +15,7 @@ class MemberList extends Component {
   }
 
   componentDidMount() {
-    axios.post(API.fetchUsers)
+    axios.post(API.user.all)
       .then(({ data }) => this.setState({ members: data.users }))
       .catch((err) => console.log(err));
   }
