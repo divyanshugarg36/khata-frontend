@@ -47,12 +47,7 @@ class Profile extends Component {
         apiToken: apiToken.current.value,
       },
     };
-    axios.put(API.user.update.profile, details)
-      .then(() => {
-        window.alert('Profile updated!');
-      }).catch(() => {
-        window.alert('Profile not updated!');
-      });
+    this.update(API.user.update.profile, details, 'Profile');
   }
 
   updatePassword = (e) => {
@@ -65,15 +60,19 @@ class Profile extends Component {
 
     axios.post(API.verify, { password: details.oldPassword })
       .then(() => {
-        axios.post(API.user.update.password, details)
-          .then(() => {
-            window.alert('Password updated!');
-          }).catch(() => {
-            window.alert('Password not updated!');
-          });
+        this.update(API.user.update.password, details, 'Password');
       })
       .catch(() => {
         window.alert('Old password is incorrect!');
+      });
+  }
+
+  update = (url, data, entity) => {
+    axios.post(url, data)
+      .then(() => {
+        window.alert(`${entity} updated!`);
+      }).catch(() => {
+        window.alert(`${entity} not updated!`);
       });
   }
 
