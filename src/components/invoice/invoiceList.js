@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import CreateInvoice from './createInvoice';
 import { API } from '../../api';
+import { getEntity } from '../../utils';
 
 class InvoiceList extends Component {
   constructor(props) {
@@ -15,9 +15,7 @@ class InvoiceList extends Component {
   }
 
   componentDidMount() {
-    axios.post(API.invoice.all)
-      .then(({ data }) => this.setState({ invoices: data.invoices }))
-      .catch((err) => console.log(err));
+    getEntity(API.invoice.all, {}, ({ invoices }) => this.setState({ invoices }));
   }
 
   render() {

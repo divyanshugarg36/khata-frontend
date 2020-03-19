@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import AddMember from './addMember';
 import { API } from '../../api';
+import { getEntity } from '../../utils';
 
 class MemberList extends Component {
   constructor(props) {
@@ -15,9 +15,7 @@ class MemberList extends Component {
   }
 
   componentDidMount() {
-    axios.post(API.user.all)
-      .then(({ data }) => this.setState({ members: data.users }))
-      .catch((err) => console.log(err));
+    getEntity(API.user.all, {}, ({ users: members }) => this.setState({ members }));
   }
 
   updateList = (member) => {
