@@ -1,8 +1,29 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import { API } from '../api';
 import messages from '../const/historyInfo';
+
+const HistoryItem = ({ data }) => {
+  const {
+    member,
+    message,
+    name,
+    date: datetime,
+  } = data;
+  return (
+    <div>
+      <strong>{member}</strong>
+      {` ${messages[message]} `}
+      <u>{name}</u>
+      <br />
+      <small>
+        {`${new Date(datetime).toDateString()}, ${new Date(datetime).toLocaleTimeString('en-US')}`}
+      </small>
+    </div>
+  );
+};
 
 class History extends Component {
   constructor(props) {
@@ -44,14 +65,7 @@ class History extends Component {
         <ul>
           { filtered.map((item, key) => (
             <li key={key}>
-              <strong>{item.member}</strong>
-              {` ${messages[item.message]} `}
-              <u>{item.name}</u>
-              <br />
-              <small>
-                {`${new Date(item.date).toDateString()}, ${new Date(item.date).toLocaleTimeString('en-US')}`}
-              </small>
-              <br />
+              <HistoryItem data={item} />
               <br />
             </li>
           )) }
@@ -60,5 +74,9 @@ class History extends Component {
     );
   }
 }
+
+HistoryItem.propTypes = {
+  data: PropTypes.instanceOf(Object).isRequired,
+};
 
 export default withRouter(History);
