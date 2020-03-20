@@ -67,23 +67,16 @@ class EditProject extends Component {
           && (
             <div>
               <h3>Edit Project details - </h3>
-              <ProjectForm
-                data={project}
-                onSubmit={update}
-                submitLabel="Update"
-              />
+              <ProjectForm data={project} onSubmit={update} submitLabel="Update" />
               <br />
-              <br />
-              <strong>Members - </strong>
+              <h3>Members - </h3>
               <ul>
-                {project.assignments.map(
-                  ({ id, name, username }) => (
-                    <li key={id}>
-                      { name || username }
-                      <button onClick={() => removeMember(id)}>Remove</button>
-                    </li>
-                  ),
-                )}
+                {project.assignments.map(({ id, name, username }) => (
+                  <li key={id}>
+                    { name || username }
+                    <button onClick={() => removeMember(id)}>Remove</button>
+                  </li>
+                ))}
               </ul>
               <h3>Add member to project - </h3>
               <AddMemberForm onSubmit={addMember} />
