@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import Input from './common/Input';
 import { API } from '../api';
+import { getEntity } from '../utils';
 
 class Profile extends Component {
   constructor(props) {
@@ -22,10 +23,7 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    axios.post(API.user.get)
-      .then(({ data }) => {
-        this.setState({ user: data.user });
-      });
+    getEntity(API.user.get, '', (data) => this.setState({ user: data.user }));
   }
 
   updateProfile = (e) => {
@@ -83,46 +81,18 @@ class Profile extends Component {
       <div>
         <h3>Edit Profile</h3>
         <form onSubmit={this.updateProfile}>
-          <Input
-            label="Name"
-            ref={this.name}
-            value={user.name || ''}
-          />
-          <Input
-            label="Email"
-            ref={this.email}
-            type="email"
-            value={user.email || ''}
-          />
-          <Input
-            label="Username"
-            ref={this.username}
-            value={user.username || ''}
-          />
-          <Input
-            label="Toggl Workspace ID"
-            ref={this.workspaceId}
-            value={user.toggl.workspaceId || ''}
-          />
-          <Input
-            label="Toggl API Token"
-            ref={this.apiToken}
-            value={user.toggl.apiToken || ''}
-          />
+          <Input label="Name" ref={this.name} value={user.name || ''} />
+          <Input label="Email" ref={this.email} type="email" value={user.email || ''} />
+          <Input label="Username" ref={this.username} value={user.username || ''} />
+          <Input label="Toggl Workspace ID" ref={this.workspaceId} value={user.toggl.workspaceId || ''} />
+          <Input label="Toggl API Token" ref={this.apiToken} value={user.toggl.apiToken || ''} />
           <button type="submit">Save</button>
         </form>
+
         <h3>Update password</h3>
         <form onSubmit={this.updatePassword}>
-          <Input
-            label="Current Password"
-            ref={this.oldPassword}
-            type="password"
-          />
-          <Input
-            label="New Password"
-            ref={this.newPassword}
-            type="password"
-          />
+          <Input label="Current Password" ref={this.oldPassword} type="password" />
+          <Input label="New Password" ref={this.newPassword} type="password" />
           <button type="submit">Save</button>
         </form>
       </div>
