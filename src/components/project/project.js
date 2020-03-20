@@ -4,6 +4,16 @@ import PropTypes from 'prop-types';
 import { API } from '../../api';
 import { getEntity, deleteEntity } from '../../utils';
 
+const Item = (props) => {
+  const { label, value } = props;
+  return (
+    <div>
+      <strong>{`${label} - `}</strong>
+      {value}
+    </div>
+  );
+};
+
 class Project extends Component {
   constructor(props) {
     super(props);
@@ -31,32 +41,17 @@ class Project extends Component {
         {project
           && (
             <div>
-              <div className="details-container">
-                <h3>Project Details - </h3>
-                <br />
-                <strong> Name - </strong>
-                {project.name}
-                <br />
-                <strong> Description - </strong>
-                {project.description}
-                <br />
-                <strong> Client - </strong>
-                {project.client}
-                <br />
-                <strong> Role - </strong>
-                {project.role}
-                <br />
-                <strong>Members - </strong>
-                <ul>
-                  {project.assignments.map(
-                    ({ id, name, username }) => (
-                      <li key={id}>
-                        { name || username }
-                      </li>
-                    ),
-                  )}
-                </ul>
-              </div>
+              <h3>Project Details - </h3>
+              <Item label="Name" value={project.name} />
+              <Item label="Description" value={project.description} />
+              <Item label="Client" value={project.client} />
+              <Item label="Role" value={project.role} />
+              <Item label="Members" value="" />
+              <ul>
+                {project.assignments.map(
+                  ({ id, name, username }) => <li key={id}>{ name || username }</li>,
+                )}
+              </ul>
               <button onClick={() => { push(`/project/edit/${id}`); }}>Edit Project</button>
               <button onClick={() => removeProject()}>Remove</button>
             </div>
