@@ -12,7 +12,7 @@ const TextArea = React.forwardRef((props, ref) => {
     <div className="textarea-container">
       <label htmlFor={newId}>{label}</label>
       <br />
-      <input
+      <textarea
         ref={ref}
         id={newId}
         defaultValue={value}
