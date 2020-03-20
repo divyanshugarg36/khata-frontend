@@ -15,9 +15,9 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    const { history: { push } } = this.props;
-    if (getToken()) {
-      push('/dashboard');
+    const { history } = this.props;
+    if (getToken() !== null) {
+      history.push('/dashboard');
     }
   }
 
