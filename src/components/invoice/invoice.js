@@ -42,16 +42,16 @@ class Invoice extends Component {
           page: 1,
           totalCount: 0,
         };
-
+        const params = {
+          workspace_id: workspaceId,
+          user_agent: email,
+          since: start,
+          until: end,
+          page: info.page,
+        };
         const fetchData = () => {
           axios.get(API.toggl.details, {
-            params: {
-              workspace_id: workspaceId,
-              user_agent: email,
-              since: start,
-              until: end,
-              page: info.page,
-            },
+            params,
             headers: {
               Authorization: `Basic ${window.btoa(`${apiToken}:api_token`)}`,
             },
