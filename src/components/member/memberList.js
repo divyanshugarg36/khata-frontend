@@ -20,7 +20,7 @@ class MemberList extends Component {
 
   updateList = (member) => {
     const { members } = this.state;
-    members.push(member);
+    members[members.length] = member;
     this.setState({ members });
   }
 
