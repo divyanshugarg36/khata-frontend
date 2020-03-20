@@ -66,6 +66,11 @@ Project.propTypes = {
   history: PropTypes.instanceOf(Object).isRequired,
 };
 
+Item.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+};
+
 Project.defaultProps = {};
 
 export default withRouter(Project);
