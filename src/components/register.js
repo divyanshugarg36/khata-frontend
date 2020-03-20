@@ -25,13 +25,15 @@ class Register extends Component {
   onRegister = (e) => {
     e.preventDefault();
     const {
-      email: { current: { value: email } },
-      username: { current: { value: username } },
-      password: { current: { value: password } },
+      email,
+      username,
+      password,
     } = this;
     const { history: { push } } = this.props;
     const data = {
-      username, password, email,
+      username: username.current.value,
+      password: password.current.value,
+      email: email.current.value,
     };
     axios.post(API.user.register, data)
       .then(({ data }) => {
