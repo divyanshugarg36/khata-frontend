@@ -1,20 +1,16 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import ProjectForm from './projectForm';
 import { API } from '../../api';
+import { addEntity } from '../../utils';
 
 class AddProject extends Component {
   addProject = (data) => {
-    axios.post(API.project.add, data)
-      .then(({ data }) => {
-        window.alert('Project added!');
-        const { onAdd } = this.props;
-        onAdd(data.project);
-      }).catch((err) => {
-        window.alert(err.response.data.info || 'Project not added!');
-      });
+    addEntity(API.project.add, data, 'Project', (data) => {
+      const { onAdd } = this.props;
+      onAdd(data.project);
+    });
   }
 
   render() {

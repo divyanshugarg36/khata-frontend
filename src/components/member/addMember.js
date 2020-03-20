@@ -1,19 +1,14 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import MemberForm from './memberForm';
 import { API } from '../../api';
+import { addEntity } from '../../utils';
 
 class AddMember extends Component {
   addMember = (data) => {
-    axios.post(API.user.add, data)
-      .then(({ data }) => {
-        window.alert('Member added!');
-        const { onAdd } = this.props;
-        onAdd(data.user);
-      })
-      .catch((err) => window.alert(err.response.data.info || 'Member not added!'));
+    const { onAdd } = this.props;
+    addEntity(API.user.add, data, 'Member', ({ user }) => onAdd(user));
   }
 
   render() {
