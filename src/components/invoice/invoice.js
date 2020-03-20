@@ -219,8 +219,15 @@ class Invoice extends Component {
               <tbody>
                 {i.items[editMode.row].tasks.map((t, i) => (
                   <tr key={Math.random().toString(32).slice(2, 7)}>
-                    <td><input onBlur={(e) => updateSubTasks(e, i, 'title')} type="text" defaultValue={t.title} /></td>
-                    <td><input onBlur={(e) => updateSubTasks(e, i, 'hours')} type="number" defaultValue={t.hours} /></td>
+                    {['title', 'hours'].map((col) => (
+                      <td key={col}>
+                        <input
+                          onBlur={(e) => updateSubTasks(e, i, col)}
+                          type={col === 'title' ? 'text' : 'number'}
+                          defaultValue={t[col]}
+                        />
+                      </td>
+                    ))}
                     <td><button onClick={() => removeRow(i)}>x</button></td>
                   </tr>
                 ))}
@@ -279,12 +286,11 @@ class Invoice extends Component {
                     Edit Sub-tasks
                   </button>
                   )}
-                  {item.tasks
-                  && <ul>{item.tasks.map((t, i) => <li key={i}>{t.title}</li>)}</ul>}
+                  <SubTaskList item={item} column="title" />
                 </td>
                 <td role="gridcell" onClick={(e) => { editCell(e, i, 1); }}>
                   <span>{item.hours}</span>
-                  {item.tasks && <ul>{item.tasks.map((t, i) => <li key={i}>{t.hours}</li>)}</ul>}
+                  <SubTaskList item={item} column="hours" />
                 </td>
                 <td>{item.price}</td>
                 <td>{item.cost}</td>
@@ -302,6 +308,22 @@ class Invoice extends Component {
     );
   }
 }
+
+const SubTaskList = ({ item, column }) => {
+  if (item.tasks && item.tasks.length) {
+    return (
+      <ul>
+        {item.tasks.map((t, i) => <li key={i}>{t[column]}</li>)}
+      </ul>
+    );
+  }
+  return null;
+};
+
+SubTaskList.propTypes = {
+  item: PropTypes.instanceOf(Object).isRequired,
+  column: PropTypes.string.isRequired,
+};
 
 Invoice.propTypes = {
   match: PropTypes.instanceOf(Object).isRequired,
