@@ -26,7 +26,8 @@ class Project extends Component {
   }
 
   componentDidMount() {
-    getEntity(API.project.get, { id: this.id }, ({ project }) => this.setState({ project }));
+    const { id } = this;
+    getEntity(API.project.get, { id }, (data) => this.setState({ project: data.project }));
   }
 
   removeProject = () => {
