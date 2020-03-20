@@ -38,24 +38,10 @@ class AddMemberForm extends Component {
     return (
       <>
         <form onSubmit={onSubmitHandler}>
-          <Input
-            label="Username"
-            ref={this.user}
-          />
-          <Input
-            label="Role"
-            ref={this.role}
-          />
-          <Input
-            label="Price"
-            ref={this.price}
-            type="number"
-          />
-          <Select
-            label="Type"
-            ref={this.type}
-            options={types}
-          />
+          <Input label="Username" ref={this.user} />
+          <Input label="Role" ref={this.role} />
+          <Input label="Price" ref={this.price} type="number" />
+          <Select label="Type" ref={this.type} options={types} />
           <button type="submit">Add member</button>
         </form>
       </>
