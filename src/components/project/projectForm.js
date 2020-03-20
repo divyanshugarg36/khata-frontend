@@ -43,32 +43,11 @@ class ProjectForm extends Component {
     return (
       <>
         <form onSubmit={onSubmitHandler}>
-          <Input
-            label="Name"
-            ref={this.name}
-            value={name || ''}
-          />
-          <TextArea
-            label="Description"
-            ref={this.description}
-            value={description || ''}
-          />
-          <Input
-            label="Client"
-            ref={this.client}
-            value={client || ''}
-          />
-          <Input
-            label="Role"
-            ref={this.role}
-            value={role || ''}
-          />
-          <Input
-            label="Toggl ID"
-            ref={this.togglId}
-            type="number"
-            value={togglId || ''}
-          />
+          <Input label="Name" ref={this.name} value={name || ''} />
+          <TextArea label="Description" ref={this.description} value={description || ''} />
+          <Input label="Client" ref={this.client} value={client || ''} />
+          <Input label="Role" ref={this.role} value={role || ''} />
+          <Input label="Toggl ID" ref={this.togglId} type="number" value={togglId || ''} />
           <button>{submitLabel}</button>
         </form>
       </>
