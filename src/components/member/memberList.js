@@ -19,10 +19,9 @@ class MemberList extends Component {
   }
 
   updateList = (member) => {
-    if (member) {
-      const { members } = this.state;
-      this.setState({ members: members.push(member) });
-    }
+    const { members } = this.state;
+    members.push(member);
+    this.setState({ members });
   }
 
   render() {
