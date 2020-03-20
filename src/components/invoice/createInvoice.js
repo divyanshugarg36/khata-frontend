@@ -58,16 +58,8 @@ class CreateInvoice extends Component {
               { projects.map((p) => <option key={p.id} value={p.id}>{`${p.name} (${p.client})`}</option>) }
             </select>
           </label>
-          <Input
-            label="Starting Date"
-            ref={this.start}
-            type="date"
-          />
-          <Input
-            label="Ending Date"
-            ref={this.end}
-            type="date"
-          />
+          <Input label="Starting Date" ref={this.start} type="date" />
+          <Input label="Ending Date" ref={this.end} type="date" />
           <button>Create Invoice</button>
         </form>
       </>
