@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { getRandom } from '../../../utils';
 
 class SubTaskTable extends Component {
@@ -77,6 +78,18 @@ const SubTask = (props) => {
       <td><button onClick={() => onRemove(index)}>x</button></td>
     </>
   );
+};
+
+SubTaskTable.propTypes = {
+  tasks: PropTypes.instanceOf(Object).isRequired,
+  onSave: PropTypes.func.isRequired,
+};
+
+SubTask.propTypes = {
+  task: PropTypes.instanceOf(Object).isRequired,
+  index: PropTypes.number.isRequired,
+  onUpdate: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
 };
 
 export default SubTaskTable;
