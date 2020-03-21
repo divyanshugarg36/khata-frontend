@@ -7,6 +7,8 @@ import html2canvas from 'html2canvas';
 import JsPdf from 'jspdf';
 import { API } from '../../api';
 import SubTaskTable from './components/subTaskTable';
+import InvoiceInfo from './components/invoiceInfo';
+import InvoiceTable from './components/invoiceTable';
 
 class Invoice extends Component {
   constructor(props) {
@@ -153,15 +155,15 @@ class Invoice extends Component {
     const { editMode, invoice } = this.state;
     const item = invoice.items[editMode.row];
     item.tasks = tasks;
-    this.calculateCosts();
     this.setState({ invoice, editMode: { active: false, row: 0 } });
+    this.calculateCosts();
   }
 
   calculateCosts = () => {
     const { invoice } = this.state;
     let total = 0;
     invoice.items.forEach((a) => {
-      if (a.hours !== 'NA' && a.tasks.length) {
+      if (a.hours !== 'NA' && a.tasks && a.tasks.length) {
         let hours = 0;
         a.tasks.forEach((t) => { hours += Number(t.hours); });
         a.hours = hours;
@@ -174,13 +176,6 @@ class Invoice extends Component {
   }
 
   render() {
-    const {
-      save,
-      generatePdf,
-      editCell,
-      editSubTasks,
-      updateSubTasks,
-    } = this;
     const { invoice: i, editMode } = this.state;
     if (!i) return null;
     return (
@@ -188,95 +183,21 @@ class Invoice extends Component {
         {editMode.active && (
           <SubTaskTable
             tasks={i.items[editMode.row].tasks}
-            onSave={updateSubTasks}
+            onSave={this.updateSubTasks}
           />
         )}
         <h1 className="logo">RYAZ</h1>
         <div className="sub-header">RYAZIO TECHNOLOGIES LLP</div>
         <div className="hr" />
-        <div className="row flex">
-          <div className="title">
-            Invoice:
-            { i.invoiceNumber }
-          </div>
-        </div>
-        <div className="row flex">
-          <div className="title">Attention : </div>
-          <div className="content">
-            { i.project.client }
-            <br />
-            { i.project.name }
-          </div>
-        </div>
-        <div className="row flex">
-          <div className="title">Date : </div>
-          <div className="content">{ `${i.start} - ${i.end}` }</div>
-        </div>
-        <div className="row flex">
-          <div className="title">Project Title : </div>
-          <div className="content">{ i.project.role }</div>
-        </div>
-        <div className="row flex">
-          <div className="title">Description : </div>
-          <div className="content">{ i.description }</div>
-        </div>
-        <table role="grid" className="employee-data">
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Total Hours</th>
-              <th>Unit Price</th>
-              <th>Cost</th>
-            </tr>
-          </thead>
-          <tbody>
-            { i.items.map((item, i) => item !== null && (
-              <tr key={i}>
-                <td role="gridcell" onClick={(e) => { editCell(e, i, 0); }}>
-                  <span>{item.name}</span>
-                  {item.type === 'Hourly' && (
-                  <button style={{ float: 'right' }} onClick={() => editSubTasks(i)}>
-                    Edit Sub-tasks
-                  </button>
-                  )}
-                  <SubTaskList item={item} column="title" />
-                </td>
-                <td role="gridcell" onClick={(e) => { editCell(e, i, 1); }}>
-                  <span>{item.hours}</span>
-                  <SubTaskList item={item} column="hours" />
-                </td>
-                <td>{item.price}</td>
-                <td>{item.cost}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="total">
-          Total: $
-          {i.total}
-        </div>
-        <button onClick={() => { save(); }}>Save Invoice</button>
-        <button id="printBtn" onClick={() => { generatePdf(); }}>Generate PDF</button>
+        <InvoiceInfo invoice={i} />
+        <InvoiceTable invoice={i} onCellEdit={this.editCell} onEditSubTasks={this.editSubTasks} />
+        <div className="total">{`Total: $${i.total}`}</div>
+        <button onClick={this.save}>Save Invoice</button>
+        <button id="printBtn" onClick={this.generatePdf}>Generate PDF</button>
       </div>
     );
   }
 }
-
-const SubTaskList = ({ item, column }) => {
-  if (item.tasks && item.tasks.length) {
-    return (
-      <ul>
-        {item.tasks.map((t, i) => <li key={i}>{t[column]}</li>)}
-      </ul>
-    );
-  }
-  return null;
-};
-
-SubTaskList.propTypes = {
-  item: PropTypes.instanceOf(Object).isRequired,
-  column: PropTypes.string.isRequired,
-};
 
 Invoice.propTypes = {
   match: PropTypes.instanceOf(Object).isRequired,
