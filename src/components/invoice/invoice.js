@@ -6,6 +6,7 @@ import axios from 'axios';
 import html2canvas from 'html2canvas';
 import JsPdf from 'jspdf';
 import { API } from '../../api';
+import SubTaskTable from './components/subTaskTable';
 
 class Invoice extends Component {
   constructor(props) {
@@ -142,37 +143,18 @@ class Invoice extends Component {
   }
 
   editSubTasks = (row) => {
-    const { editMode, invoice } = this.state;
+    const { editMode } = this.state;
     editMode.active = true;
     editMode.row = row;
     this.setState({ editMode });
-    if (invoice.items[editMode.row].tasks.length === 0) {
-      this.addRow();
-    }
   };
 
-  addRow = () => {
-    const { editMode, invoice } = this.state;
-    invoice.items[editMode.row].tasks.push({ title: '', hours: 0 });
-    this.setState(() => invoice);
-  }
-
-  removeRow = (taskNo) => {
-    const { editMode, invoice } = this.state;
-    invoice.items[editMode.row].tasks.splice(taskNo, 1);
-    this.setState({ invoice });
-    this.calculateCosts();
-  }
-
-  updateSubTasks = (event, taskNo, col) => {
-    const { value } = event.target;
+  updateSubTasks = (tasks) => {
     const { editMode, invoice } = this.state;
     const item = invoice.items[editMode.row];
-    item.tasks[taskNo][col] = value;
-    if (col === 'hours') {
-      this.calculateCosts();
-    }
-    this.setState({ invoice });
+    item.tasks = tasks;
+    this.calculateCosts();
+    this.setState({ invoice, editMode: { active: false, row: 0 } });
   }
 
   calculateCosts = () => {
@@ -197,8 +179,6 @@ class Invoice extends Component {
       generatePdf,
       editCell,
       editSubTasks,
-      addRow,
-      removeRow,
       updateSubTasks,
     } = this;
     const { invoice: i, editMode } = this.state;
@@ -206,37 +186,10 @@ class Invoice extends Component {
     return (
       <div className="invoice" id="invoice">
         {editMode.active && (
-          <div className="edit-mode-table">
-            <br />
-            <table border="1">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Hours</th>
-                  <th><button onClick={addRow}>Add row</button></th>
-                </tr>
-              </thead>
-              <tbody>
-                {i.items[editMode.row].tasks.map((t, i) => (
-                  <tr key={Math.random().toString(32).slice(2, 7)}>
-                    {['title', 'hours'].map((col) => (
-                      <td key={col}>
-                        <input
-                          onBlur={(e) => updateSubTasks(e, i, col)}
-                          type={col === 'title' ? 'text' : 'number'}
-                          defaultValue={t[col]}
-                        />
-                      </td>
-                    ))}
-                    <td><button onClick={() => removeRow(i)}>x</button></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <button onClick={() => this.setState({ editMode: { active: false, row: 0 } })}>
-              Save Tasks
-            </button>
-          </div>
+          <SubTaskTable
+            tasks={i.items[editMode.row].tasks}
+            onSave={updateSubTasks}
+          />
         )}
         <h1 className="logo">RYAZ</h1>
         <div className="sub-header">RYAZIO TECHNOLOGIES LLP</div>
