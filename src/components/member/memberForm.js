@@ -34,8 +34,8 @@ class MemberForm extends Component {
     } = data;
     return (
       <div className="form-container">
-        <Input label="Name" ref={(el) => { this.name = el; }} type="text" value={name || ''} />
-        <Input label="Username" ref={(el) => { this.username = el; }} value={username || ''} />
+        <Input label="Name" ref={(el) => { this.name = el; }} value={name || ''} />
+        <Input label="Username" type="text" ref={(el) => { this.username = el; }} value={username || ''} />
         <Input label="Email" ref={(el) => { this.email = el; }} type="email" value={email || ''} />
         <Input label="Toggl UID" type="number" ref={(el) => { this.togglUid = el; }} value={toggl ? toggl.uid : ''} />
         <button onClick={onSubmitHandler}>{submitLabel}</button>
