@@ -4,21 +4,12 @@ import PropTypes from 'prop-types';
 import Input from '../common/Input';
 
 class MemberForm extends Component {
-  constructor(props) {
-    super(props);
-
-    this.username = React.createRef();
-    this.name = React.createRef();
-    this.email = React.createRef();
-    this.togglUid = React.createRef();
-  }
-
   onSubmitHandler = () => {
     const {
-      username: { current: { value: username } },
-      name: { current: { value: name } },
-      email: { current: { value: email } },
-      togglUid: { current: { value: togglUid } },
+      username: { value: username },
+      name: { value: name },
+      email: { value: email },
+      togglUid: { value: togglUid },
     } = this;
     const data = {
       username,
@@ -43,10 +34,10 @@ class MemberForm extends Component {
     } = data;
     return (
       <div className="form-container">
-        <Input label="Name" ref={this.name} value={name || ''} />
-        <Input label="Username" ref={this.username} value={username || ''} />
-        <Input label="Email" ref={this.email} type="email" value={email || ''} />
-        <Input label="Toggl UID" type="number" ref={this.togglUid} value={toggl ? toggl.uid : ''} />
+        <Input label="Name" ref={(el) => { this.name = el; }} value={name || ''} />
+        <Input label="Username" ref={(el) => { this.username = el; }} value={username || ''} />
+        <Input label="Email" ref={(el) => { this.email = el; }} type="email" value={email || ''} />
+        <Input label="Toggl UID" type="number" ref={(el) => { this.togglUid = el; }} value={toggl ? toggl.uid : ''} />
         <button onClick={onSubmitHandler}>{submitLabel}</button>
       </div>
     );
