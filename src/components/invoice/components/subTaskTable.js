@@ -43,16 +43,7 @@ class SubTaskTable extends Component {
           <tbody>
             {tasks.map((t, i) => (
               <tr key={getRandom()}>
-                {['title', 'hours'].map((col) => (
-                  <td key={col}>
-                    <input
-                      onBlur={(e) => this.updateTask(e, i, col)}
-                      type={col === 'title' ? 'text' : 'number'}
-                      defaultValue={t[col]}
-                    />
-                  </td>
-                ))}
-                <td><button onClick={() => this.removeTask(i)}>x</button></td>
+                <SubTask task={t} onUpdate={this.updateTask} onRemove={this.removeTask} index={i} />
               </tr>
             ))}
           </tbody>
@@ -62,5 +53,30 @@ class SubTaskTable extends Component {
     );
   }
 }
+
+const SubTask = (props) => {
+  const {
+    task,
+    onUpdate,
+    onRemove,
+    index,
+  } = props;
+  return (
+    <>
+      {
+        ['title', 'hours'].map((col) => (
+          <td key={col}>
+            <input
+              onBlur={(e) => onUpdate(e, index, col)}
+              type={col === 'title' ? 'text' : 'number'}
+              defaultValue={task[col]}
+            />
+          </td>
+        ))
+      }
+      <td><button onClick={() => onRemove(index)}>x</button></td>
+    </>
+  );
+};
 
 export default SubTaskTable;
