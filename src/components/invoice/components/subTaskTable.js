@@ -1,58 +1,66 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import { getRandom } from '../../../utils';
 
-const SubTaskTable = (props) => {
-  const { tasks: data, onSave } = props;
-  const tasks = data && data.length ? data : [{ title: '', hours: 0 }];
-  const [rows, setRows] = useState(tasks);
+class SubTaskTable extends Component {
+  constructor(props) {
+    super(props);
+    const { tasks: data, onSave } = props;
+    const tasks = data && data.length ? data : [{ title: '', hours: 0 }];
+    this.state = { tasks, onSave };
+  }
 
-  const updateRow = (event, row, col) => {
+  updateTask = (event, row, col) => {
     const { value } = event.target;
-    const newRows = [...rows];
-    newRows[row][col] = value;
-    setRows(newRows);
+    const { tasks } = this.state;
+    tasks[row][col] = value;
+    this.setState(() => tasks);
   };
 
-  const removeRow = (rowNo) => {
-    const newRows = [...rows];
-    newRows.splice(rowNo, 1);
-    setRows(newRows);
+  removeTask = (rowNo) => {
+    const { tasks } = this.state;
+    tasks.splice(rowNo, 1);
+    this.setState(() => tasks);
   };
 
-  const addRow = () => {
-    setRows([...rows, { title: '', hours: 0 }]);
+  addTask = () => {
+    const { tasks } = this.state;
+    tasks.push({ title: '', hours: 0 });
+    this.setState(() => tasks);
   };
 
-  return (
-    <div className="edit-mode-table">
-      <table border="1">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Hours</th>
-            <th><button onClick={addRow}>Add row</button></th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r, i) => (
-            <tr key={getRandom()}>
-              {['title', 'hours'].map((col) => (
-                <td key={col}>
-                  <input
-                    onBlur={(e) => updateRow(e, i, col)}
-                    type={col === 'title' ? 'text' : 'number'}
-                    defaultValue={r[col]}
-                  />
-                </td>
-              ))}
-              <td><button onClick={() => removeRow(i)}>x</button></td>
+  render() {
+    const { tasks, onSave } = this.state;
+    return (
+      <div className="edit-mode-table">
+        <table border="1">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Hours</th>
+              <th><button onClick={this.addTask}>Add row</button></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <button onClick={() => onSave(rows)}>Save Tasks</button>
-    </div>
-  );
-};
+          </thead>
+          <tbody>
+            {tasks.map((t, i) => (
+              <tr key={getRandom()}>
+                {['title', 'hours'].map((col) => (
+                  <td key={col}>
+                    <input
+                      onBlur={(e) => this.updateTask(e, i, col)}
+                      type={col === 'title' ? 'text' : 'number'}
+                      defaultValue={t[col]}
+                    />
+                  </td>
+                ))}
+                <td><button onClick={() => this.removeTask(i)}>x</button></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button onClick={() => onSave(tasks)}>Save Tasks</button>
+      </div>
+    );
+  }
+}
 
 export default SubTaskTable;
