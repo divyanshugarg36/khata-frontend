@@ -6,7 +6,7 @@ class SubTaskTable extends Component {
   constructor(props) {
     super(props);
     const { tasks: data, onSave } = props;
-    const tasks = data && data.length ? data : [{ title: '', hours: 0 }];
+    const tasks = data.length ? data : [{ title: '', hours: 0 }];
     this.state = { tasks, onSave };
   }
 
@@ -81,7 +81,7 @@ const SubTask = (props) => {
 };
 
 SubTaskTable.propTypes = {
-  tasks: PropTypes.instanceOf(Object).isRequired,
+  tasks: PropTypes.instanceOf(Object),
   onSave: PropTypes.func.isRequired,
 };
 
@@ -90,6 +90,10 @@ SubTask.propTypes = {
   index: PropTypes.number.isRequired,
   onUpdate: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
+};
+
+SubTaskTable.defaultProps = {
+  tasks: [{ title: '', hours: 0 }],
 };
 
 export default SubTaskTable;
