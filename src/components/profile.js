@@ -11,7 +11,6 @@ class Profile extends Component {
     this.state = {
       user: null,
     };
-
     this.name = React.createRef();
     this.email = React.createRef();
     this.username = React.createRef();
@@ -23,7 +22,8 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    getEntity(API.user.get, '', (data) => this.setState({ user: data.user }));
+    const _isMounted = this.updater.isMounted(this);
+    getEntity(API.user.get, '', (data) => _isMounted && this.setState({ user: data.user }));
   }
 
   updateProfile = (e) => {

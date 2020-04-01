@@ -36,10 +36,10 @@ class History extends Component {
   }
 
   componentDidMount() {
+    const _isMounted = this.updater.isMounted(this);
     axios.post(API.history.get)
-      .then(({ data }) => {
-        this.setState({ history: data.history, filtered: data.history });
-      })
+      .then(({ data }) => _isMounted
+        && this.setState({ history: data.history, filtered: data.history }))
       .catch((err) => console.log(err));
   }
 

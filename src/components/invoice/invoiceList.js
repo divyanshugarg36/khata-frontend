@@ -15,7 +15,8 @@ class InvoiceList extends Component {
   }
 
   componentDidMount() {
-    getEntity(API.invoice.all, '', ({ invoices }) => this.setState({ invoices }));
+    const _isMounted = this.updater.isMounted(this);
+    getEntity(API.invoice.all, '', ({ invoices }) => _isMounted && this.setState({ invoices }));
   }
 
   render() {

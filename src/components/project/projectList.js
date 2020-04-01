@@ -15,8 +15,9 @@ class ProjectList extends Component {
   }
 
   componentDidMount() {
+    const _isMounted = this.updater.isMounted(this);
     axios.post(API.project.all, {})
-      .then(({ data }) => this.setState({ projects: data.projects }))
+      .then(({ data }) => _isMounted && this.setState({ projects: data.projects }))
       .catch((err) => console.log(err));
   }
 

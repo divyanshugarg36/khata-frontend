@@ -15,7 +15,8 @@ class MemberList extends Component {
   }
 
   componentDidMount() {
-    getEntity(API.user.all, {}, ({ users: members }) => this.setState({ members }));
+    const _isMounted = this.updater.isMounted(this);
+    getEntity(API.user.all, {}, ({ users: members }) => _isMounted && this.setState({ members }));
   }
 
   updateList = (member) => {
