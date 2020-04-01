@@ -33,14 +33,19 @@ class History extends Component {
       filtered: [],
       filters: ['All', ...Object.keys(messages)],
     };
+    this._isMounted = false;
   }
 
   componentDidMount() {
-    const _isMounted = this.updater.isMounted(this);
+    this._isMounted = true;
     axios.post(API.history.get)
-      .then(({ data }) => _isMounted
+      .then(({ data }) => this._isMounted
         && this.setState({ history: data.history, filtered: data.history }))
       .catch((err) => console.log(err));
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   filter = (message) => {

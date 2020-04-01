@@ -8,6 +8,7 @@ import { getEntity } from '../utils';
 class Profile extends Component {
   constructor(props) {
     super(props);
+    this._isMounted = false;
     this.state = {
       user: null,
     };
@@ -22,8 +23,12 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    const _isMounted = this.updater.isMounted(this);
-    getEntity(API.user.get, '', (data) => _isMounted && this.setState({ user: data.user }));
+    this._isMounted = true;
+    getEntity(API.user.get, '', (data) => this._isMounted && this.setState({ user: data.user }));
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   updateProfile = (e) => {

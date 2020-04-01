@@ -12,13 +12,19 @@ class ProjectList extends Component {
       projects: [],
       history: props.history,
     };
+
+    this._isMounted = false;
   }
 
   componentDidMount() {
-    const _isMounted = this.updater.isMounted(this);
+    this._isMounted = true;
     axios.post(API.project.all, {})
-      .then(({ data }) => _isMounted && this.setState({ projects: data.projects }))
+      .then(({ data }) => this._isMounted && this.setState({ projects: data.projects }))
       .catch((err) => console.log(err));
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   updateList = (project) => {

@@ -8,6 +8,7 @@ import { getEntity } from '../../utils';
 class InvoiceList extends Component {
   constructor(props) {
     super(props);
+    this._isMounted = false;
     this.state = {
       invoices: [],
       history: props.history,
@@ -15,8 +16,12 @@ class InvoiceList extends Component {
   }
 
   componentDidMount() {
-    const _isMounted = this.updater.isMounted(this);
-    getEntity(API.invoice.all, '', ({ invoices }) => _isMounted && this.setState({ invoices }));
+    this._isMounted = true;
+    getEntity(API.invoice.all, '', ({ invoices }) => this._isMounted && this.setState({ invoices }));
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   render() {

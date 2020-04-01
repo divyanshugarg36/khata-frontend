@@ -12,11 +12,17 @@ class MemberList extends Component {
       members: [],
       history: props.history,
     };
+    this._isMounted = false;
   }
 
   componentDidMount() {
-    const _isMounted = this.updater.isMounted(this);
-    getEntity(API.user.all, {}, ({ users: members }) => _isMounted && this.setState({ members }));
+    this._isMounted = true;
+    getEntity(API.user.all, {}, ({ users: members }) => this._isMounted
+      && this.setState({ members }));
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   updateList = (member) => {
