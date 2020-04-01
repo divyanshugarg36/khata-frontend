@@ -12,17 +12,24 @@ class CreateInvoice extends Component {
     this.state = {
       projects: [],
     };
+    this._isMounted = false;
     this.project = React.createRef();
     this.start = React.createRef();
     this.end = React.createRef();
   }
 
   componentDidMount() {
+    this._isMounted = true;
     axios.post(API.project.all)
       .then(({ data }) => {
-        this.setState({ projects: data.projects });
+        if(this._isMounted)
+          this.setState({ projects: data.projects });
       })
       .catch((e) => console.log(e));
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   create = (e) => {
