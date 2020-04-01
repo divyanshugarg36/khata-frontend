@@ -6,6 +6,8 @@ export const addEntity = (url, data, entity, cb) => {
       window.alert(`${entity} added!`);
       cb(data);
     }).catch((err) => {
-      window.alert(err.response.data.info || `${entity} not added!`);
+      if (err.response) {
+        window.alert(err.response.data.info || `${entity} not added!`);
+      }
     });
 };

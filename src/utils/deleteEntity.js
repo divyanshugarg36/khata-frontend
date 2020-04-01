@@ -7,5 +7,9 @@ export const deleteEntity = (url, data, history, entity) => {
       push(`/${entity.toLowerCase()}/all`);
       window.alert(`${entity} removed!`);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      if (err.response) {
+        window.alert(err.response.data.info || `${entity} not removed!`);
+      }
+    });
 };
