@@ -9,7 +9,9 @@ export const deleteEntity = (url, data, history, entity) => {
     })
     .catch((err) => {
       if (err.response) {
-        window.alert(err.response.data.info || `${entity} not removed!`);
+        window.alert(err.response.data.info);
+      } else {
+        window.alert(`${entity} not removed!`);
       }
     });
 };
