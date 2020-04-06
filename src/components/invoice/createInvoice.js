@@ -22,8 +22,7 @@ class CreateInvoice extends Component {
     this._isMounted = true;
     axios.post(API.project.all)
       .then(({ data }) => {
-        if(this._isMounted)
-          this.setState({ projects: data.projects });
+        if (this._isMounted) this.setState({ projects: data.projects });
       })
       .catch((e) => console.log(e));
   }
