@@ -11,7 +11,6 @@ class InvoiceList extends Component {
     this._isMounted = false;
     this.state = {
       invoices: [],
-      history: props.history,
     };
   }
 
@@ -25,7 +24,8 @@ class InvoiceList extends Component {
   }
 
   render() {
-    const { invoices, history: { push } } = this.state;
+    const { invoices } = this.state;
+    const { history: { push } } = this.props;
     return (
       <>
         <CreateInvoice onAdd={this.updateList} />
