@@ -8,11 +8,12 @@ import { getEntity } from '../../utils';
 class MemberList extends Component {
   constructor(props) {
     super(props);
+    this._isMounted = false;
+    
     this.state = {
       members: [],
       history: props.history,
     };
-    this._isMounted = false;
   }
 
   componentDidMount() {
